@@ -1,16 +1,24 @@
 {
-  "name": "@fmsuit/cli",
-  "module": "index.ts",
+  "name": "@fm-suit/cli",
+  "module": "index.tsx",
+  "version": "0.2.0",
   "type": "module",
   "private": true,
   "scripts": {
     "lint": "eslint ."
   },
   "devDependencies": {
+    "@fm-suit/eslint-config": "*",
     "@types/bun": "latest",
-    "@fm-suit/eslint-config": "*"
+    "@types/react": "19.2.8"
   },
   "peerDependencies": {
     "typescript": "5"
+  },
+  "dependencies": {
+    "default-browser": "5.4.0",
+    "ink": "6.6.0",
+    "puppeteer-core": "24.35.0",
+    "react": "19.2.3"
   }
 }
