@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-01-18
+
+### Added
+- `scraping` function to scrape data from the Frontend Mentor website
+- `getChallenges` function to manage the scraping function and local data
+- `getValidCache` utility function to validate cache files
+- `waitUntil` utility function to manage code flow
+- Types for challenges in the `challengeData` file in the typings folder
+- `useInitialization` custom React hook to cascade startup functions
+
+### Changed
+- Refactored cookie logic in the `login` function in `auth.ts`
+- Refactored `auth.ts` by moving constants to `env.ts` and removing unused imports
+- Renamed `src/consts/safeRoutes.ts` to `src/consts/env.ts` with added constants
+
 ## [0.2.0] - 2026-01-16
 
 ### Added
@@ -29,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Core project structure with src, utils, and consts directories
 - Base dependencies and package configuration
 
-[Unreleased]: https://github.com/eze-sk/fm-suite/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/eze-sk/fm-suite/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/eze-sk/fm-suite/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/eze-sk/fm-suite/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/eze-sk/fm-suite/releases/tag/v0.1.0
