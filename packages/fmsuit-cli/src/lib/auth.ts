@@ -1,26 +1,16 @@
 import puppeteer from "puppeteer-core";
-import { DATA_DIR, CACHE_FILE } from "../consts/safeRoutes"
-import { existsSync } from 'node:fs';
-import { findChromiumBasedBrowser, type Browser } from "../utils/findChromiumBasedBrowser";
-import defaultBrowser from "default-browser";
+import { DATA_DIR, BROWSER_PATH, FM_URL, SESSION_FILE } from "../consts/env"
 
-const browser = await defaultBrowser()
-const BROWSER_PATH = findChromiumBasedBrowser(browser.name as Browser)
-
-type ReturnVerifySession = {
+export type ReturnVerifySession = {
   status: boolean,
   loginLink: string | null
 }
-
-const FM_URL = "https://www.frontendmentor.io"
 
 /**
  * Verifies if a user session is valid by checking the Frontend Mentor website.
  * @returns {Promise<ReturnVerifySession>} An object containing the session status and login link if available
  */
 export async function verifySession(): Promise<ReturnVerifySession> {
-  const checkCache = existsSync(CACHE_FILE)
-
   const browser = await puppeteer.launch({
     headless: true,
     executablePath: BROWSER_PATH
@@ -29,7 +19,7 @@ export async function verifySession(): Promise<ReturnVerifySession> {
   const page = await browser.newPage()
 
   await page.goto(FM_URL, {
-    waitUntil: 'networkidle2'
+    waitUntil: 'domcontentloaded'
   })
 
   try {
@@ -42,7 +32,7 @@ export async function verifySession(): Promise<ReturnVerifySession> {
 
     await browser.close();
 
-    if (loginLink || !checkCache) {
+    if (loginLink) {
       return {
         status: true,
         loginLink: loginLink
@@ -98,8 +88,19 @@ export async function login(url: string): Promise<boolean> {
 
         if (currentUrl.includes(TARGET_URL)) {
           await new Promise(r => setTimeout(r, 1000))
-          await browser.close()
+
+          const cookies = await browser.cookies()
+          const token = cookies.find(c => c.name === "fem_token")
+
+          if (cookies && token?.expires) {
+            await Bun.write(SESSION_FILE, JSON.stringify({
+              name: token.name,
+              expires_in: token.expires
+            }))
+          }
+
           resolve(true)
+          await browser.close()
         }
       })
 
@@ -109,6 +110,7 @@ export async function login(url: string): Promise<boolean> {
     await page.goto(url, { waitUntil: 'networkidle2' });
 
     await page.bringToFront();
+
     await page.evaluate(() => {
       const win = window as Window;
       const doc = document as Document;
@@ -116,6 +118,7 @@ export async function login(url: string): Promise<boolean> {
       win.focus();
       (doc.body as HTMLElement).focus();
     });
+
     await page.mouse.click(0, 0);
 
     return await loginPromise
