@@ -1,8 +1,8 @@
-import puppeteer from "puppeteer-core";
-import { DATA_DIR, BROWSER_PATH, FM_URL, SESSION_FILE } from "../consts/env"
+import puppeteer from 'puppeteer-core'
+import { DATA_DIR, BROWSER_PATH, FM_URL, SESSION_FILE } from '../consts/env'
 
 export type ReturnVerifySession = {
-  status: boolean,
+  status: boolean
   loginLink: string | null
 }
 
@@ -13,38 +13,39 @@ export type ReturnVerifySession = {
 export async function verifySession(): Promise<ReturnVerifySession> {
   const browser = await puppeteer.launch({
     headless: true,
-    executablePath: BROWSER_PATH
+    executablePath: BROWSER_PATH,
   })
 
   const page = await browser.newPage()
 
   await page.goto(FM_URL, {
-    waitUntil: 'domcontentloaded'
+    waitUntil: 'domcontentloaded',
   })
 
   try {
-    const buttonLogin = await page.waitForSelector('xpath/.//a[contains(., "Log in")]', { timeout: 5000 })
+    const buttonLogin = await page
+      .waitForSelector('xpath/.//a[contains(., "Log in")]', { timeout: 5000 })
       .catch(() => null)
 
     const loginLink = buttonLogin
-      ? await page.evaluate(el => (el as HTMLAnchorElement).href, buttonLogin)
-      : null;
+      ? await page.evaluate((el) => (el as HTMLAnchorElement).href, buttonLogin)
+      : null
 
-    await browser.close();
+    await browser.close()
 
     if (loginLink) {
       return {
         status: true,
-        loginLink: loginLink
-      };
+        loginLink: loginLink,
+      }
     }
 
     return {
       status: false,
-      loginLink: null
-    };
+      loginLink: null,
+    }
   } catch (err) {
-    await browser.close();
+    await browser.close()
     throw new Error(`Error finding login button, <verifySession> : ${err}`)
   }
 }
@@ -78,25 +79,29 @@ export async function login(url: string): Promise<boolean> {
   const page = (await browser.pages())[0]
 
   try {
-    if (!page) throw new Error('The authentication page could not be opened, <login>')
+    if (!page)
+      throw new Error('The authentication page could not be opened, <login>')
 
     await page.goto(url)
 
     const loginPromise = new Promise<boolean>((resolve) => {
-      page.on("framenavigated", async (frame) => {
+      page.on('framenavigated', async (frame) => {
         const currentUrl = frame.url()
 
         if (currentUrl.includes(TARGET_URL)) {
-          await new Promise(r => setTimeout(r, 1000))
+          await new Promise((r) => setTimeout(r, 1000))
 
           const cookies = await browser.cookies()
-          const token = cookies.find(c => c.name === "fem_token")
+          const token = cookies.find((c) => c.name === 'fem_token')
 
           if (cookies && token?.expires) {
-            await Bun.write(SESSION_FILE, JSON.stringify({
-              name: token.name,
-              expires_in: token.expires
-            }))
+            await Bun.write(
+              SESSION_FILE,
+              JSON.stringify({
+                name: token.name,
+                expires_in: token.expires,
+              }),
+            )
           }
 
           resolve(true)
@@ -104,22 +109,22 @@ export async function login(url: string): Promise<boolean> {
         }
       })
 
-      browser.on("disconnected", () => resolve(false))
+      browser.on('disconnected', () => resolve(false))
     })
 
-    await page.goto(url, { waitUntil: 'networkidle2' });
+    await page.goto(url, { waitUntil: 'networkidle2' })
 
-    await page.bringToFront();
+    await page.bringToFront()
 
     await page.evaluate(() => {
-      const win = window as Window;
-      const doc = document as Document;
+      const win = window as Window
+      const doc = document as Document
 
-      win.focus();
-      (doc.body as HTMLElement).focus();
-    });
+      win.focus()
+      ;(doc.body as HTMLElement).focus()
+    })
 
-    await page.mouse.click(0, 0);
+    await page.mouse.click(0, 0)
 
     return await loginPromise
   } catch (err) {

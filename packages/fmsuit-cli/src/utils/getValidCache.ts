@@ -1,4 +1,4 @@
-import { isAfter } from "date-fns";
+import { isAfter } from 'date-fns'
 
 type Data = {
   name?: string
@@ -15,7 +15,7 @@ export async function getValidCache(path: string): Promise<boolean> {
   if (!(await file.exists())) return false
 
   try {
-    const data = await file.json() as Data
+    const data = (await file.json()) as Data
     let expiryDate = new Date(data.expires_in)
 
     if (data?.name) {

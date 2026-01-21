@@ -7,10 +7,9 @@ export function waitUntil(condition: () => boolean): Promise<void> {
   return new Promise<void>((resolve) => {
     const interval = setInterval(() => {
       if (condition()) {
-        console.log(condition())
-        clearInterval(interval);
-        resolve();
+        clearInterval(interval)
+        resolve()
       }
-    }, 100);
+    }, 100)
   })
 }

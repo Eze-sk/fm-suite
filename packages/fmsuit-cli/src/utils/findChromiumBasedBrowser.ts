@@ -1,4 +1,4 @@
-export type Browser = "Chrome" | "Edge" | "Brave"
+export type Browser = 'Chrome' | 'Edge' | 'Brave'
 
 /**
  * Finds the executable path for a Chromium-based browser on the current platform.
@@ -11,20 +11,21 @@ export function findChromiumBasedBrowser(browser: Browser): string {
     win32: {
       Chrome: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
       Edge: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
-      Brave: 'C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe'
+      Brave:
+        'C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe',
     },
     darwin: {
       Chrome: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
       Edge: '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
-      Brave: '/Applications/Brave Browser.app/Contents/MacOS/Brave Browser'
+      Brave: '/Applications/Brave Browser.app/Contents/MacOS/Brave Browser',
     },
     linux: {
       Chrome: '/usr/bin/google-chrome',
       Chromium: '/usr/bin/chromium',
       Edge: '/usr/bin/microsoft-edge',
-      Brave: '/usr/bin/brave-browser'
-    }
-  };
+      Brave: '/usr/bin/brave-browser',
+    },
+  }
 
   const platformKey = process.platform
   let currentPlatforms
@@ -38,6 +39,6 @@ export function findChromiumBasedBrowser(browser: Browser): string {
   if (browser) {
     return currentPlatforms[browser]
   } else {
-    throw new Error("No browser has been provided")
+    throw new Error('No browser has been provided')
   }
 }
