@@ -1,22 +1,23 @@
-import { useState, useEffect, useCallback, useRef } from "react"
+import { useState, useEffect, useCallback, useRef } from 'react'
 
-import { verifySession, login } from "../lib/auth"
-import { getValidCache } from "../utils/getValidCache"
+import { verifySession, login } from '../lib/auth'
+import { getValidCache } from '../utils/getValidCache'
 
-import { SESSION_FILE } from "../consts/env"
-import { getChallenges } from "../lib/getChallenges"
-import type { ChallengeData } from "../typings/challengeData"
-import { waitUntil } from "../utils/waitUntil"
+import { SESSION_FILE } from '../consts/env'
+import { getChallenges } from '../lib/getChallenges'
+import type { ChallengeData } from '../typings/challengeData'
+import { waitUntil } from '../utils/waitUntil'
 
-type Status =
+export type Status =
   | 'idle'
   | 'validating_session'
   | 'awaiting_permission'
   | 'logging_in'
   | 'verifying_data'
   | 'get_data'
+  | 'scraping_data'
   | 'completed'
-  | 'error';
+  | 'error'
 
 /**
  * React hook that manages the initialization sequence for the application.
@@ -26,8 +27,12 @@ type Status =
  * @returns {Function} setPermission - Function to set user permission for login
  * @returns {ChallengeData|null} data - The retrieved challenge data or null if not yet loaded
  */
-export function useInitialization(): { status: Status; setPermission: (value: boolean) => void; data: ChallengeData | null } {
-  const [status, setStatus] = useState<Status>("idle")
+export function useInitialization(): {
+  status: Status
+  setPermission: (value: boolean) => void
+  data: ChallengeData | null
+} {
+  const [status, setStatus] = useState<Status>('idle')
   const [data, setData] = useState<ChallengeData | null>(null)
 
   const permissionRef = useRef(false)
@@ -38,43 +43,43 @@ export function useInitialization(): { status: Status; setPermission: (value: bo
 
   const runInitSequence = useCallback(async (): Promise<void> => {
     try {
-      setStatus("validating_session")
+      setStatus('validating_session')
       const hasCache = await getValidCache(SESSION_FILE)
 
-      let sessionStatus = hasCache;
-      let loginLink = null;
+      let sessionStatus = hasCache
+      let loginLink = null
 
       if (!hasCache) {
-        const session = await verifySession();
-        sessionStatus = session.status;
-        loginLink = session.loginLink;
+        const session = await verifySession()
+        sessionStatus = session.status
+        loginLink = session.loginLink
       }
 
       if (!sessionStatus) {
-        setStatus("awaiting_permission")
+        setStatus('awaiting_permission')
 
         await waitUntil(() => permissionRef.current)
 
-        setStatus("logging_in");
-        const loginSuccessful = await login(loginLink ?? "");
+        setStatus('logging_in')
+        const loginSuccessful = await login(loginLink ?? '')
 
         if (!loginSuccessful) {
-          setStatus("error")
-          throw new Error("LOGIN_FAILED")
-        };
+          setStatus('error')
+          throw new Error('LOGIN_FAILED')
+        }
       }
 
-      setStatus("verifying_data")
+      setStatus('verifying_data')
 
-      const challengeData = await getChallenges()
+      const challengeData = await getChallenges({ status: setStatus })
       setData(challengeData)
 
-      setStatus("completed")
+      setStatus('completed')
     } catch (err) {
-      setStatus("error")
+      setStatus('error')
       throw new Error(`INITIALIZATION_FAILED ${err}`)
     } finally {
-      setStatus("completed")
+      setStatus('completed')
     }
   }, [])
 
