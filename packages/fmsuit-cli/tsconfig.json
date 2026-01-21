@@ -28,10 +28,13 @@
 
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
       "@components/*": ["./src/components/*"],
+      "@consts/*": ["./src/consts/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@typings/*": ["./src/typings/*"],
       "@utils/*": ["./src/utils/*"],
-      "@typings/*": ["./src/typings/*"]
+      "@/*": ["./src/*"]
     }
   }
 }
