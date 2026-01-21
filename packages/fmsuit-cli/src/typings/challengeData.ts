@@ -1,16 +1,21 @@
-export type Plan = "free+" | "free" | "premium"
+export type Plan = 'free+' | 'free' | 'premium'
 
-export type Difficulty = "newbie" | "junior" | "intermediate" | "advanced" | "guru"
+export type Difficulty =
+  | 'newbie'
+  | 'junior'
+  | 'intermediate'
+  | 'advanced'
+  | 'guru'
 
-export type Lenguages = "HTML" | "CSS" | "JS" | "API"
+export type Languages = 'HTML' | 'CSS' | 'JS' | 'API'
 
-export type Status = "pending" | "progress" | "completed"
+export type Status = 'pending' | 'progress' | 'completed'
 
 export interface ChallengeScrap {
   id: number
   plan: Plan
   difficulty: Difficulty
-  lenguages: Lenguages[]
+  languages: Languages[]
   status: Status
   isNew: boolean
   title: string
