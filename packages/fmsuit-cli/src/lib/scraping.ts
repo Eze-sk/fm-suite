@@ -1,7 +1,7 @@
-import { add } from 'date-fns'
-import { CACHE_FILE, BROWSER_PATH, FM_URL } from '../consts/env'
-import puppeteer from 'puppeteer-core'
-import type { ChallengeScrap, ChallengeData } from '../typings/challengeData'
+import { add } from 'date-fns';
+import puppeteer from 'puppeteer-core';
+import { CACHE_FILE, BROWSER_PATH, FM_URL } from '@consts/env';
+import type { ChallengeScrap, ChallengeData } from '@typings/challengeData';
 
 /**
  * Scrapes challenge data from the Frontend Mentor website and caches the results.

@@ -1,5 +1,5 @@
-import { Box } from 'ink'
-import TextInput from 'ink-text-input'
+import { Box } from 'ink';
+import TextInput from 'ink-text-input';
 
 interface Props {
   value: string

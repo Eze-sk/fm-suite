@@ -1,4 +1,4 @@
-import { Box, type BoxProps } from 'ink'
+import { Box, type BoxProps } from 'ink';
 
 interface Props extends BoxProps {
   children: React.ReactNode

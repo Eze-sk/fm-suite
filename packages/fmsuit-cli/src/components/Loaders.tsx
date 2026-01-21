@@ -1,7 +1,10 @@
-import { Box, Text } from 'ink'
-import CenterElement from './Center'
-import { useEffect, useState } from 'react'
-import { theme } from '@/colorPalette'
+import { useEffect, useState } from 'react';
+
+import { Box, Text } from 'ink';
+
+import { theme } from '@/colorPalette';
+
+import CenterElement from './Center';
 
 interface Props {
   content: string

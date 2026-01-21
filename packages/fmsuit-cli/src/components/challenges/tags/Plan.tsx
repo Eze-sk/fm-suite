@@ -1,8 +1,7 @@
-import { Box, Text } from 'ink'
+import { Box, Text } from 'ink';
+import type { Plan } from '@typings/challengeData';
 
-import { colors } from '@/colorPalette'
-
-import type { Plan } from '@typings/challengeData'
+import { colors } from '@/colorPalette';
 
 interface Props {
   plan: Plan

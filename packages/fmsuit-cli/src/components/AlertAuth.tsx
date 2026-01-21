@@ -1,6 +1,8 @@
-import { Box, Text, useInput } from 'ink'
-import CenterElement from './Center'
-import { theme } from '@/colorPalette'
+import { Box, Text, useInput } from 'ink';
+
+import { theme } from '@/colorPalette';
+
+import CenterElement from './Center';
 
 interface Props {
   onConfirm: (val: boolean) => void

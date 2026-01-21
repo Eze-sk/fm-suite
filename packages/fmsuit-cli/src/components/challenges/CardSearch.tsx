@@ -1,12 +1,11 @@
-import { useId } from 'react'
+import { useId } from 'react';
 
-import { Box, Text } from 'ink'
+import { Box, Text } from 'ink';
+import type { Difficulty, Languages, Plan } from '@typings/challengeData';
 
-import PlanTag from './tags/Plan'
-import LanguagesTag from './tags/Languages'
-import DifficultyTag from './tags/Difficulty'
-
-import type { Difficulty, Languages, Plan } from '../../typings/challengeData'
+import PlanTag from './tags/Plan';
+import LanguagesTag from './tags/Languages';
+import DifficultyTag from './tags/Difficulty';
 
 interface Props {
   plan: Plan

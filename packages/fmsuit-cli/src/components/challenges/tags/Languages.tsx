@@ -1,8 +1,7 @@
-import { Text } from 'ink'
+import { Text } from 'ink';
+import type { Languages } from '@typings/challengeData';
 
-import { colors } from '@/colorPalette'
-
-import type { Languages } from '@typings/challengeData'
+import { colors } from '@/colorPalette';
 
 interface Props {
   language: Languages
