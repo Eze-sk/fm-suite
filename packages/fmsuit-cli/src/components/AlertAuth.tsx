@@ -16,7 +16,7 @@ interface Props {
  * @param {Function} props.onConfirm - Callback function invoked when user presses Enter
  * @returns {React.ReactNode} Alert dialog UI
  */
-export default function AuthRequiredAlert({
+export default function AlertAuth({
   onConfirm,
 }: Props): React.ReactNode {
   useInput((_, key) => {
