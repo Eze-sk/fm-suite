@@ -1,5 +1,3 @@
-import { useId } from 'react';
-
 import { Box, Text } from 'ink';
 import type { Difficulty, Languages, Plan } from '@typings/challengeData';
 
@@ -30,25 +28,27 @@ export default function ChallengeCardSearch({
   languages,
   difficulty,
 }: Props): React.ReactNode {
-  const idElement = useId()
 
   return (
     <Box
-      paddingX={2}
+      paddingX={1}
+      paddingBottom={1}
       width={80}
       borderStyle="round"
-      justifyContent="space-between"
-      alignItems="center"
+      flexDirection="column"
+      borderColor="gray"
     >
-      <Box gap={2} alignItems="center">
-        <PlanTag plan={plan} />
-        <Text bold>{title}</Text>
-      </Box>
-      <Box gap={2} alignItems="center">
-        {languages.map((l) => (
-          <LanguagesTag language={l} key={idElement} />
-        ))}
+      <Box alignItems="center" justifyContent="space-between">
+        <Box alignItems="center" gap={1}>
+          <PlanTag plan={plan} />
+          <Text bold>{title}</Text>
+        </Box>
         <DifficultyTag level={difficulty} />
+      </Box>
+      <Box alignItems="center" gap={2}>
+        {languages.map((l) => (
+          <LanguagesTag language={l} key={l} />
+        ))}
       </Box>
     </Box>
   )
