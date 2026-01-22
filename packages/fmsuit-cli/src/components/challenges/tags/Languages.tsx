@@ -31,7 +31,7 @@ export default function LanguagesTag({ language }: Props): React.ReactNode {
   }
 
   return (
-    <Text color={color} bold>
+    <Text color={color}>
       {language}
     </Text>
   )
