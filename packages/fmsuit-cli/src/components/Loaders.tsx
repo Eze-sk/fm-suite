@@ -6,10 +6,6 @@ import { theme } from '@/colorPalette';
 
 import CenterElement from './Center';
 
-interface Props {
-  content: string
-}
-
 /**
  * Displays an animated loading indicator with three blinking squares.
  * The animation cycles through the squares with a 300ms interval.
@@ -42,18 +38,35 @@ export function LoadingAnimation(): React.ReactNode {
   )
 }
 
+interface Props {
+  content: string
+  isCentered?: boolean
+}
+
 /**
  * Displays a loading card with animated loader and centered text content.
  * @component
  * @param {Props} props - Component props
  * @param {string} props.content - Text content to display below the loader animation
+ * @param {boolean} props.isCentered - Whether to center the content (default: true)
  * @returns {React.ReactNode} Loading card UI
  */
-export function LoaderCard({ content }: Props): React.ReactNode {
+export function LoaderCard({ content, isCentered = true }: Props): React.ReactNode {
+  const contentUpperCase = content.toUpperCase()
+
   return (
-    <CenterElement gap={1} flexDirection="column">
-      <LoadingAnimation />
-      <Text> {content.toLocaleUpperCase()}</Text>
-    </CenterElement>
+    <>
+      {isCentered ? (
+        <CenterElement gap={1} flexDirection="column">
+          <LoadingAnimation />
+          <Text> {contentUpperCase}</Text>
+        </CenterElement>
+      ) : (
+        <Box gap={1} flexDirection="column" alignItems="center">
+          <LoadingAnimation />
+          <Text> {contentUpperCase}</Text>
+        </Box>
+      )}
+    </>
   )
 }
