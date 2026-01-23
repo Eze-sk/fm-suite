@@ -1,4 +1,5 @@
-import { Box } from 'ink';
+import { theme } from '@/colorPalette';
+import { Box, Text } from 'ink';
 import TextInput from 'ink-text-input';
 import { memo, useState } from 'react';
 
@@ -24,15 +25,22 @@ export const SearchInput = memo(({ onChange, placeholder = 'Search for a challen
   };
 
   return (
-    <Box paddingY={1} paddingX={2} width={80} borderStyle="round">
-      <TextInput
-        value={localValue}
-        onChange={handleChange}
-        focus={true}
-        showCursor={true}
-        placeholder={placeholder}
-        highlightPastedText
-      />
+    <Box width={80} flexDirection="column">
+      <Box paddingY={1} paddingX={2} borderStyle="round">
+        <TextInput
+          value={localValue}
+          onChange={handleChange}
+          focus={true}
+          showCursor={true}
+          placeholder={placeholder}
+          highlightPastedText
+        />
+      </Box>
+      <Box justifyContent="flex-end">
+        <Text color="gray">
+          <Text color={theme.secondary}>↑↓</Text> to navigate • <Text color={theme.secondary}>Enter</Text> to open
+        </Text>
+      </Box>
     </Box>
   );
 });
