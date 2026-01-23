@@ -2,6 +2,7 @@ import { Box, Text } from 'ink';
 
 import ascii from '@/ASCIILogo.json' with { type: 'json' }
 import { colors } from '@/colorPalette';
+import { memo } from 'react';
 
 /**
  * Renders the FM Suite CLI logo with ASCII art and branding.
@@ -9,7 +10,7 @@ import { colors } from '@/colorPalette';
  * @component
  * @returns {React.ReactNode} Logo display
  */
-export default function Logo(): React.ReactNode {
+function Logo(): React.ReactNode {
   const formatAscii = (lines: string[]): string => lines.join('\n')
 
   return (
@@ -24,3 +25,5 @@ export default function Logo(): React.ReactNode {
     </Box>
   )
 }
+
+export const MemoizedLogo = memo(Logo);
