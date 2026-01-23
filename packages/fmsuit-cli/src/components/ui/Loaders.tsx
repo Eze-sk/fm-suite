@@ -39,7 +39,7 @@ export function LoadingAnimation(): React.ReactNode {
 }
 
 interface Props {
-  content: string
+  message: string
   isCentered?: boolean
 }
 
@@ -47,24 +47,24 @@ interface Props {
  * Displays a loading card with animated loader and centered text content.
  * @component
  * @param {Props} props - Component props
- * @param {string} props.content - Text content to display below the loader animation
+ * @param {string} props.message - Loading message to display
  * @param {boolean} props.isCentered - Whether to center the content (default: true)
  * @returns {React.ReactNode} Loading card UI
  */
-export function LoaderCard({ content, isCentered = true }: Props): React.ReactNode {
-  const contentUpperCase = content.toUpperCase()
+export function LoaderCard({ message, isCentered = true }: Props): React.ReactNode {
+  const messageUpperCase = message.toUpperCase()
 
   return (
     <>
       {isCentered ? (
-        <CenterElement gap={1} flexDirection="column">
+        <CenterElement gap={2} flexDirection="column">
           <LoadingAnimation />
-          <Text> {contentUpperCase}</Text>
+          <Text> {messageUpperCase}</Text>
         </CenterElement>
       ) : (
-        <Box gap={1} flexDirection="column" alignItems="center">
+        <Box gap={2} flexDirection="column" alignItems="center">
           <LoadingAnimation />
-          <Text> {contentUpperCase}</Text>
+          <Text> {messageUpperCase}</Text>
         </Box>
       )}
     </>
