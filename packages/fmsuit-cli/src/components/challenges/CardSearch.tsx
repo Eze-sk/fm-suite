@@ -4,12 +4,14 @@ import type { Difficulty, Languages, Plan } from '@typings/challengeData';
 import PlanTag from './tags/Plan';
 import LanguagesTag from './tags/Languages';
 import DifficultyTag from './tags/Difficulty';
+import { theme } from '@/colorPalette';
 
 interface Props {
   plan: Plan
   title: string
   languages: Languages[]
   difficulty: Difficulty
+  isFocused?: boolean
 }
 
 /**
@@ -20,6 +22,7 @@ interface Props {
  * @param {string} props.title - Title of the challenge
  * @param {Languages[]} props.languages - Array of supported languages for the challenge
  * @param {Difficulty} props.difficulty - Difficulty level of the challenge
+ * @param {boolean} [props.isFocused=false] - Whether the card is currently focused/selected
  * @returns {React.ReactNode} Challenge card display
  */
 export default function ChallengeCardSearch({
@@ -27,6 +30,7 @@ export default function ChallengeCardSearch({
   title,
   languages,
   difficulty,
+  isFocused = false
 }: Props): React.ReactNode {
 
   return (
@@ -36,7 +40,7 @@ export default function ChallengeCardSearch({
       width={80}
       borderStyle="round"
       flexDirection="column"
-      borderColor="gray"
+      borderColor={isFocused ? theme.secondary : "gray"}
     >
       <Box alignItems="center" justifyContent="space-between">
         <Box alignItems="center" gap={1}>
