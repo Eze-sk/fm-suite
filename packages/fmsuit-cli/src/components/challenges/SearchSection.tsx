@@ -81,7 +81,9 @@ export default function SearchSection({ status, query, data, onSelectResult, vis
   const offset = Math.max(0, selectedIndex - visibleItems + 1);
   const visibleChallenges = search.slice(offset, offset + visibleItems);
 
-  useInput((_, key) => {
+  useInput((input, key) => {
+    if (input) return
+
     if (key.upArrow) {
       setSelectedIndex((prev) => (prev < search.length - 1 ? prev + 1 : prev));
     }
@@ -106,7 +108,7 @@ export default function SearchSection({ status, query, data, onSelectResult, vis
       {STATUS_MESSAGES[status] ? (
         <Box marginBottom={5}>
           <LoaderCard
-            content={STATUS_MESSAGES[status]}
+            message={STATUS_MESSAGES[status]}
             isCentered={false}
           />
         </Box>
