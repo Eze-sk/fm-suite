@@ -1,5 +1,5 @@
-import puppeteer from 'puppeteer-core';
-import { DATA_DIR, BROWSER_PATH, FM_URL, SESSION_FILE } from '@consts/env';
+import puppeteer from 'puppeteer-core'
+import { DATA_DIR, BROWSER_PATH, FM_URL, SESSION_FILE } from '@consts/env'
 
 export type ReturnVerifySession = {
   status: boolean
@@ -121,7 +121,7 @@ export async function login(url: string): Promise<boolean> {
       const doc = document as Document
 
       win.focus()
-        ; (doc.body as HTMLElement).focus()
+      ;(doc.body as HTMLElement).focus()
     })
 
     await page.mouse.click(0, 0)

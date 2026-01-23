@@ -1,7 +1,7 @@
-import { Text } from 'ink';
-import type { Languages } from '@typings/challengeData';
+import { Text } from 'ink'
+import type { Languages } from '@typings/challengeData'
 
-import { colors } from '@/colorPalette';
+import { colors } from '@/colorPalette'
 
 interface Props {
   language: Languages
@@ -30,9 +30,5 @@ export default function LanguagesTag({ language }: Props): React.ReactNode {
     color = colors.cyan
   }
 
-  return (
-    <Text color={color}>
-      {language}
-    </Text>
-  )
+  return <Text color={color}>{language}</Text>
 }

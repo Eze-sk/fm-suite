@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 
-import { Box, Text } from 'ink';
+import { Box, Text } from 'ink'
 
-import { theme } from '@/colorPalette';
+import { theme } from '@/colorPalette'
 
-import CenterElement from './Center';
+import CenterElement from './Center'
 
 /**
  * Displays an animated loading indicator with three blinking squares.
@@ -51,7 +51,10 @@ interface Props {
  * @param {boolean} props.isCentered - Whether to center the content (default: true)
  * @returns {React.ReactNode} Loading card UI
  */
-export function LoaderCard({ message, isCentered = true }: Props): React.ReactNode {
+export function LoaderCard({
+  message,
+  isCentered = true,
+}: Props): React.ReactNode {
   const messageUpperCase = message.toUpperCase()
 
   return (

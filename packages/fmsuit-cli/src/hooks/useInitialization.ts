@@ -1,11 +1,11 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react'
 
-import { SESSION_FILE } from '@consts/env';
-import { waitUntil } from '@utils/waitUntil';
-import { verifySession, login } from '@lib/auth';
-import { getChallenges } from '@lib/getChallenges';
-import { getValidCache } from '@utils/getValidCache';
-import type { ChallengeData } from '@typings/challengeData';
+import { SESSION_FILE } from '@consts/env'
+import { waitUntil } from '@utils/waitUntil'
+import { verifySession, login } from '@lib/auth'
+import { getChallenges } from '@lib/getChallenges'
+import { getValidCache } from '@utils/getValidCache'
+import type { ChallengeData } from '@typings/challengeData'
 
 export type Status =
   | 'idle'

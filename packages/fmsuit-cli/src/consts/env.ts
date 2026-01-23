@@ -1,10 +1,10 @@
-import { join } from 'node:path';
-import { homedir } from 'node:os';
-import defaultBrowser from 'default-browser';
+import { join } from 'node:path'
+import { homedir } from 'node:os'
+import defaultBrowser from 'default-browser'
 import {
   findChromiumBasedBrowser,
   type Browser,
-} from '@utils/findChromiumBasedBrowser';
+} from '@utils/findChromiumBasedBrowser'
 
 export const DATA_DIR = join(homedir(), '.fmsuit-cli-sessions')
 export const CACHE_FILE = join(DATA_DIR, 'challenge_cache.json')

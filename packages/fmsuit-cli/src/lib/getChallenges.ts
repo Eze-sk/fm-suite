@@ -1,11 +1,11 @@
-import type { Dispatch, SetStateAction } from 'react';
+import type { Dispatch, SetStateAction } from 'react'
 
-import { CACHE_FILE } from '@consts/env';
-import { getValidCache } from '@utils/getValidCache';
-import type { Status } from '@hooks/useInitialization';
-import type { ChallengeData } from '@typings/challengeData';
+import { CACHE_FILE } from '@consts/env'
+import { getValidCache } from '@utils/getValidCache'
+import type { Status } from '@hooks/useInitialization'
+import type { ChallengeData } from '@typings/challengeData'
 
-import { scraping } from './scraping';
+import { scraping } from './scraping'
 
 interface Props {
   status: Dispatch<SetStateAction<Status>>

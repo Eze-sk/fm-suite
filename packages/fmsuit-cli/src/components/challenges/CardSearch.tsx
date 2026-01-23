@@ -1,10 +1,10 @@
-import { Box, Text } from 'ink';
-import type { Difficulty, Languages, Plan } from '@typings/challengeData';
+import { Box, Text } from 'ink'
+import type { Difficulty, Languages, Plan } from '@typings/challengeData'
 
-import PlanTag from './tags/Plan';
-import LanguagesTag from './tags/Languages';
-import DifficultyTag from './tags/Difficulty';
-import { theme } from '@/colorPalette';
+import PlanTag from './tags/Plan'
+import LanguagesTag from './tags/Languages'
+import DifficultyTag from './tags/Difficulty'
+import { theme } from '@/colorPalette'
 
 interface Props {
   plan: Plan
@@ -30,9 +30,8 @@ export default function ChallengeCardSearch({
   title,
   languages,
   difficulty,
-  isFocused = false
+  isFocused = false,
 }: Props): React.ReactNode {
-
   return (
     <Box
       paddingX={1}
@@ -40,7 +39,7 @@ export default function ChallengeCardSearch({
       width={80}
       borderStyle="round"
       flexDirection="column"
-      borderColor={isFocused ? theme.secondary : "gray"}
+      borderColor={isFocused ? theme.secondary : 'gray'}
     >
       <Box alignItems="center" justifyContent="space-between">
         <Box alignItems="center" gap={1}>

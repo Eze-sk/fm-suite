@@ -1,8 +1,8 @@
-import { Box, Text, useInput } from 'ink';
+import { Box, Text, useInput } from 'ink'
 
-import { theme } from '@/colorPalette';
+import { theme } from '@/colorPalette'
 
-import CenterElement from './Center';
+import CenterElement from './Center'
 
 interface Props {
   onConfirm: (val: boolean) => void
@@ -16,9 +16,7 @@ interface Props {
  * @param {Function} props.onConfirm - Callback function invoked when user presses Enter
  * @returns {React.ReactNode} Alert dialog UI
  */
-export default function AlertAuth({
-  onConfirm,
-}: Props): React.ReactNode {
+export default function AlertAuth({ onConfirm }: Props): React.ReactNode {
   useInput((_, key) => {
     if (key.return) {
       onConfirm(true)
