@@ -19,7 +19,7 @@ export default function CenterElement({
   return (
     <Box
       flexGrow={1}
-      height={40}
+      height={44}
       justifyContent="center"
       alignItems="center"
       {...att}
