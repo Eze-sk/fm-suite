@@ -13,8 +13,8 @@ export type Status = 'pending' | 'progress' | 'completed'
 
 export interface ChallengeScrap {
   id: number
-  plan: Plan
-  difficulty: Difficulty
+  plan: Plan | undefined
+  difficulty: Difficulty | undefined
   languages: Languages[]
   status: Status
   isNew: boolean
