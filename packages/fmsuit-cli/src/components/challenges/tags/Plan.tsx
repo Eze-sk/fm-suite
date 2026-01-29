@@ -4,7 +4,7 @@ import type { Plan } from '@typings/challengeData'
 import { colors } from '@/colorPalette'
 
 interface Props {
-  plan: Plan
+  plan: Plan | undefined
 }
 
 /**
@@ -31,7 +31,7 @@ export default function PlanTag({ plan }: Props): React.ReactNode {
   return (
     <Box backgroundColor={bgColor} paddingX={1}>
       <Text color={textColor} bold>
-        {plan.toUpperCase()}
+        {plan?.toUpperCase()}
       </Text>
     </Box>
   )

@@ -4,7 +4,7 @@ import type { Languages } from '@typings/challengeData'
 import { colors } from '@/colorPalette'
 
 interface Props {
-  language: Languages
+  language: Languages | undefined
 }
 
 /**

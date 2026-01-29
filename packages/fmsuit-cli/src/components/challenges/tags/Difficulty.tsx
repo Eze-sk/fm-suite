@@ -4,7 +4,7 @@ import type { Difficulty } from '@typings/challengeData'
 import { colors } from '@/colorPalette'
 
 interface Props {
-  level: Difficulty
+  level: Difficulty | undefined
   showNumber?: boolean
 }
 
@@ -48,7 +48,7 @@ export default function DifficultyTag({
           <Text>{number}</Text>
         </Box>
       )}
-      <Text color={color}>{level.toUpperCase()}</Text>
+      <Text color={color}>{level?.toUpperCase()}</Text>
     </Box>
   )
 }
