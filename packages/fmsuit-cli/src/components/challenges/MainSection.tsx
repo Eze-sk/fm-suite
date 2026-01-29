@@ -6,6 +6,7 @@ import SearchSection from './SearchSection'
 import { useEffect, useState } from 'react'
 import type { Status } from '@hooks/useInitialization'
 import type { ChallengeData, ChallengeScrap } from '@typings/challengeData'
+import ChallengeSection from './ChallengeSection'
 
 type ViewStatus = 'LOGO' | 'SEARCHER' | 'CHALLENGE'
 
@@ -18,16 +19,22 @@ export default function MainSection({
   challenge,
   appStep,
 }: Props): React.ReactNode {
-  const [view, setView] = useState<ViewStatus>('LOGO')
+  const [selectedChallenge, setSelectedChallenge] = useState<
+    ChallengeScrap | undefined
+  >()
+  const [view, setView] = useState<ViewStatus>(
+    selectedChallenge ? 'CHALLENGE' : 'LOGO',
+  )
+
   const [query, setQuery] = useState('')
   const [deferredQuery, setDeferredQuery] = useState('')
-  const [selectChallenge, setSelectChallenge] =
-    useState<ChallengeScrap | null>()
+  const [sectionHeight, setSectionHeight] = useState(30)
+  const [visibleResults, setVisibleResults] = useState(3)
 
   useEffect(() => {
     const handler = setTimeout(() => {
       setDeferredQuery(query)
-    }, 50)
+    }, 40)
 
     return (): void => clearTimeout(handler)
   }, [query])
@@ -35,8 +42,22 @@ export default function MainSection({
   const handleSearch = (e: string): void => {
     setQuery(e)
 
-    if (e !== '') setView('SEARCHER')
-    else setView('LOGO')
+    if (e !== '') {
+      setView('SEARCHER')
+    } else {
+      if (selectedChallenge) {
+        setView('CHALLENGE')
+      } else {
+        setView('LOGO')
+      }
+    }
+  }
+
+  const handleSelectResult = (data: ChallengeScrap | undefined): void => {
+    setSelectedChallenge(data)
+    setSectionHeight(43)
+    setVisibleResults(5)
+    setView('CHALLENGE')
   }
 
   return (
@@ -44,7 +65,7 @@ export default function MainSection({
       flexDirection="column"
       alignItems="center"
       justifyContent="flex-end"
-      height={28}
+      height={sectionHeight}
     >
       {view === 'LOGO' && (
         <Box marginLeft={4} marginBottom={3}>
@@ -56,10 +77,13 @@ export default function MainSection({
           data={challenge}
           query={deferredQuery}
           status={appStep}
-          onSelectResult={setSelectChallenge}
+          onSelectResult={handleSelectResult}
+          visibleItems={visibleResults}
         />
       )}
-      {view === 'CHALLENGE' && <Box></Box>}
+      {view === 'CHALLENGE' && (
+        <ChallengeSection challengeData={selectedChallenge} />
+      )}
       <SearchInput onChange={(e) => handleSearch(e)} />
     </Box>
   )
