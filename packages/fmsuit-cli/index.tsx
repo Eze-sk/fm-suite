@@ -5,6 +5,7 @@ import AlertAuth from '@components/ui/AlertAuth'
 import { LoaderCard } from '@components/ui/Loaders'
 import MainSection from '@components/challenges/MainSection'
 import { useInitialization, type Status } from '@hooks/useInitialization'
+import { FocusManager } from '@/contexts/FocusManager'
 
 /**
  * Root component of the CLI application.
@@ -33,7 +34,7 @@ function App(): React.ReactNode {
   }, [])
 
   return (
-    <>
+    <FocusManager>
       {status === 'idle' && (
         <LoaderCard message="Initializing CLI environment..." />
       )}
@@ -47,7 +48,7 @@ function App(): React.ReactNode {
         <LoaderCard message="Awaiting browser authentication..." />
       )}
       {isMainUiReady && <MainSection challenge={data} appStep={status} />}
-    </>
+    </FocusManager>
   )
 }
 
