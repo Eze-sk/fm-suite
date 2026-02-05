@@ -37,12 +37,6 @@ export const SearchInput = memo(
             highlightPastedText
           />
         </Box>
-        <Box justifyContent="flex-end">
-          <Text color="gray">
-            <Text color={theme.secondary}>↑↓</Text> to navigate •{' '}
-            <Text color={theme.secondary}>Enter</Text> to open
-          </Text>
-        </Box>
       </Box>
     )
   },
