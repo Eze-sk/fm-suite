@@ -4,8 +4,9 @@ import { render } from 'ink'
 import AlertAuth from '@components/ui/AlertAuth'
 import { LoaderCard } from '@components/ui/Loaders'
 import MainSection from '@components/challenges/MainSection'
-import { useInitialization, type Status } from '@hooks/useInitialization'
+import { useInitialization } from '@hooks/useInitialization'
 import { FocusManager } from '@/contexts/FocusManager'
+import type { AppStatus } from '@/stores/useApp'
 
 /**
  * Root component of the CLI application.
@@ -19,15 +20,15 @@ import { FocusManager } from '@/contexts/FocusManager'
  * render(<App />);
  */
 function App(): React.ReactNode {
-  const { data, status, setPermission } = useInitialization()
+  const { data, appStatus, setPermission } = useInitialization()
 
-  const MAIN_UI_STATUS: Status[] = [
+  const MAIN_UI_STATUS: AppStatus[] = [
     'verifying_data',
     'get_data',
     'scraping_data',
     'completed',
   ]
-  const isMainUiReady = MAIN_UI_STATUS.includes(status)
+  const isMainUiReady = MAIN_UI_STATUS.includes(appStatus)
 
   useEffect(() => {
     console.clear()
@@ -35,19 +36,19 @@ function App(): React.ReactNode {
 
   return (
     <FocusManager>
-      {status === 'idle' && (
+      {appStatus === 'idle' && (
         <LoaderCard message="Initializing CLI environment..." />
       )}
-      {status === 'validating_session' && (
+      {appStatus === 'validating_session' && (
         <LoaderCard message="Authenticating session..." />
       )}
-      {status === 'awaiting_permission' && (
+      {appStatus === 'awaiting_permission' && (
         <AlertAuth onConfirm={setPermission} />
       )}
-      {status === 'logging_in' && (
+      {appStatus === 'logging_in' && (
         <LoaderCard message="Awaiting browser authentication..." />
       )}
-      {isMainUiReady && <MainSection challenge={data} appStep={status} />}
+      {isMainUiReady && <MainSection challenge={data} appStep={appStatus} />}
     </FocusManager>
   )
 }
