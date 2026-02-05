@@ -1,6 +1,6 @@
 import { Box, useInput } from 'ink'
 import FocusElement from './FocusElement'
-import { useState } from 'react'
+import { forwardRef, useImperativeHandle, useState } from 'react'
 import { useNavigationContext } from '@/contexts/useNavigation'
 
 type Option = {
@@ -9,7 +9,7 @@ type Option = {
   children?: Option[]
 }
 
-type Selected = {
+export type Selected = {
   id: string
   value: string
 }
@@ -21,7 +21,13 @@ export type SelectType = {
   isDisabled?: boolean
   nextFocus?: string
   placeholder?: string
+  onOpen?: (v: boolean) => void
   onChange?: (selected: Selected[]) => void
+}
+
+export type SelectHandle = {
+  openMenu: () => void;
+  closeMenu: () => void;
 }
 
 /**
@@ -54,28 +60,22 @@ export type SelectType = {
  *         { id: "theme", value: "Theme" },
  *         { id: "font", value: "Font Size" }
  *       ]
- *     },
- *     {
- *       id: "general",
- *       value: "General",
- *       children: [
- *         { id: "lang", value: "Language" }
- *       ]
  *     }
  *   ]}
  *   onChange={(selected) => handleSettings(selected)}
  *   nextFocus="save-button"
  * />
  */
-export default function Select({
+const Select = forwardRef<SelectHandle, SelectType>(({
   id,
   title,
   option,
   isDisabled,
   nextFocus,
   placeholder,
+  onOpen,
   onChange,
-}: SelectType): React.ReactNode {
+}, ref) => {
   const [open, setOpen] = useState(false)
   const [navigationStack, setNavigationStack] = useState<Option[][]>([option])
   const [selectedPath, setSelectedPath] = useState<Option[]>([])
@@ -84,9 +84,22 @@ export default function Select({
 
   const currentOptions = navigationStack[navigationStack.length - 1]
 
+  useImperativeHandle(ref, () => ({
+    openMenu: (): void => {
+      setOpen(true);
+      setNavigationStack([option]);
+    },
+    closeMenu: (): void => setOpen(false)
+  }))
+
   const toggleMenu = (): void => {
-    setOpen(!open)
-    if (!open) setNavigationStack([option])
+    if (isDisabled) return
+    const nextState = !open;
+    setOpen(nextState);
+    if (nextState) {
+      setNavigationStack([option]);
+      onOpen?.(open);
+    }
   }
 
   const onSelect = (opt: Option): void => {
@@ -135,7 +148,6 @@ export default function Select({
         <FocusElement.Text label={`${open ? '⏷' : '▶'} ${title}`} />
       </FocusElement>
       {open &&
-        !isDisabled &&
         currentOptions?.map((opt) => (
           <Box key={opt.id} marginLeft={2}>
             <FocusElement id={opt.id} onAction={() => onSelect(opt)}>
@@ -144,7 +156,10 @@ export default function Select({
               </Box>
             </FocusElement>
           </Box>
-        ))}
+        ))
+      }
     </Box>
   )
-}
+})
+
+export default Select
