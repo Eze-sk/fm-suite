@@ -2,10 +2,10 @@ import {
   createContext,
   useContext,
   useEffect,
+  useRef,
   type Dispatch,
   type SetStateAction,
 } from 'react'
-import { useInput } from 'ink'
 
 interface Props {
   id: string
@@ -14,7 +14,7 @@ interface Props {
 
 interface ContextType {
   activeId: string
-  register: (id: string) => void
+  register: (id: string, onSelect?: () => void) => void
   unregister: (id: string) => void
   setFocus: Dispatch<SetStateAction<string>>
 }
@@ -66,16 +66,20 @@ export function useNavigation({ id, onSelect }: Props): { isFocused: boolean } {
   const { activeId, register, unregister } = useNavigationContext()
   const isFocused = activeId === id
 
+  const onSelectRef = useRef(onSelect)
+
   useEffect(() => {
-    register(id)
+    onSelectRef.current = onSelect
+  }, [onSelect])
+
+  useEffect(() => {
+    const handle = (): void => {
+      onSelectRef.current?.();
+    }
+
+    register(id, handle)
     return (): void => unregister(id)
   }, [id, unregister, register])
-
-  useInput((_, key) => {
-    if (isFocused && key.return && onSelect) {
-      onSelect()
-    }
-  })
 
   return { isFocused }
 }
