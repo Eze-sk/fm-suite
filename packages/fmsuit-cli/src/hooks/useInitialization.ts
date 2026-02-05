@@ -1,22 +1,13 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 
 import { SESSION_FILE } from '@consts/env'
 import { waitUntil } from '@utils/waitUntil'
 import { verifySession, login } from '@lib/auth'
-import { getChallenges } from '@lib/getChallenges'
+import { getChallenges } from '@lib/challenge.controller'
 import { getValidCache } from '@utils/getValidCache'
 import type { ChallengeData } from '@typings/challengeData'
-
-export type Status =
-  | 'idle'
-  | 'validating_session'
-  | 'awaiting_permission'
-  | 'logging_in'
-  | 'verifying_data'
-  | 'get_data'
-  | 'scraping_data'
-  | 'completed'
-  | 'error'
+import { useAppStore, type AppStatus } from '@/stores/useApp'
+import { useShallow } from 'zustand/shallow'
 
 /**
  * React hook that manages the initialization sequence for the application.
@@ -27,12 +18,18 @@ export type Status =
  * @returns {ChallengeData|null} data - The retrieved challenge data or null if not yet loaded
  */
 export function useInitialization(): {
-  status: Status
+  appStatus: AppStatus
   setPermission: (value: boolean) => void
   data: ChallengeData | null
 } {
-  const [status, setStatus] = useState<Status>('idle')
-  const [data, setData] = useState<ChallengeData | null>(null)
+  const { appStatus, data, setData, setStatus } = useAppStore(
+    useShallow((state) => ({
+      appStatus: state.appStatus,
+      data: state.data,
+      setStatus: state.setStatus,
+      setData: state.setData
+    }))
+  )
 
   const permissionRef = useRef(false)
 
@@ -96,5 +93,5 @@ export function useInitialization(): {
     }
   }, [runInitSequence])
 
-  return { status, setPermission, data }
+  return { appStatus, setPermission, data }
 }
