@@ -1,16 +1,17 @@
 import { Box, Text } from 'ink'
-import type { Difficulty, Languages, Plan } from '@typings/challengeData'
+import type { Difficulty, Languages, Plan, StatesChallenge } from '@typings/challengeData'
 
 import PlanTag from './tags/Plan'
 import LanguagesTag from './tags/Languages'
 import DifficultyTag from './tags/Difficulty'
-import { theme } from '@/colorPalette'
+import { colors, theme } from '@/colorPalette'
 
 interface Props {
   plan: Plan
   title: string
   languages: Languages[]
   difficulty: Difficulty
+  status: StatesChallenge
   isFocused?: boolean
 }
 
@@ -30,8 +31,16 @@ export default function ChallengeCardSearch({
   title,
   languages,
   difficulty,
+  status,
   isFocused = false,
 }: Props): React.ReactNode {
+
+  const Status = (): React.ReactNode => {
+    if (status === "started") return <Text color={colors.cyan}>○</Text>
+    if (status === "completed" || status === "new_start") return <Text color={colors.blue.default}>✔</Text>
+    return <></>
+  }
+
   return (
     <Box
       paddingX={1}
@@ -43,6 +52,7 @@ export default function ChallengeCardSearch({
     >
       <Box alignItems="center" justifyContent="space-between">
         <Box alignItems="center" gap={1}>
+          <Status />
           <PlanTag plan={plan} />
           <Text bold>{title}</Text>
         </Box>

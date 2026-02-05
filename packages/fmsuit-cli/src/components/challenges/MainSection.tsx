@@ -4,14 +4,15 @@ import { SearchInput } from '@components/ui/TextInput'
 
 import SearchSection from './SearchSection'
 import { useEffect, useState } from 'react'
-import type { Status } from '@hooks/useInitialization'
 import type { ChallengeData, ChallengeScrap } from '@typings/challengeData'
 import ChallengeSection from './ChallengeSection'
+import FooterMainSection from './FooterMainSection'
+import type { AppStatus } from '@/stores/useApp'
 
 type ViewStatus = 'LOGO' | 'SEARCHER' | 'CHALLENGE'
 
 interface Props {
-  appStep: Status
+  appStep: AppStatus
   challenge: ChallengeData | null
 }
 
@@ -85,6 +86,7 @@ export default function MainSection({
         <ChallengeSection challengeData={selectedChallenge} />
       )}
       <SearchInput onChange={(e) => handleSearch(e)} />
+      <FooterMainSection />
     </Box>
   )
 }
