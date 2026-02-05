@@ -9,14 +9,14 @@ export type Difficulty =
 
 export type Languages = 'HTML' | 'CSS' | 'JS' | 'API'
 
-export type Status = 'pending' | 'progress' | 'completed'
+export type StatesChallenge = 'pending' | "started" | 'completed' | "new_start"
 
 export interface ChallengeScrap {
   id: number
   plan: Plan | undefined
   difficulty: Difficulty | undefined
   languages: Languages[]
-  status: Status
+  status: StatesChallenge
   isNew: boolean
   title: string
   description: string
