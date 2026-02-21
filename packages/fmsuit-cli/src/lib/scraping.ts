@@ -98,12 +98,12 @@ export async function scraping(): Promise<ChallengeData> {
     }
 
     await Bun.write(CACHE_FILE, JSON.stringify(challengeData, null, 2))
-    await browser.close()
     return challengeData
   } catch (err) {
-    await browser.close()
     throw new Error(
       `Error to the scraper, the mentor frontend challenge, <scraping> : ${err}`,
     )
+  } finally {
+    await browser.close()
   }
 }
