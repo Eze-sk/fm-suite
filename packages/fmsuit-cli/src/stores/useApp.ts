@@ -1,5 +1,6 @@
 import { getChallenges } from "@lib/challenge.controller"
 import type { ChallengeData } from "@typings/challengeData"
+import type { ConfigFile } from "@typings/ConfigFile"
 import { create } from "zustand"
 
 export type AppStatus =
@@ -16,9 +17,11 @@ export type AppStatus =
 export interface AppStore {
   appStatus: AppStatus
   data: ChallengeData | null
+  config: ConfigFile
   setStatus: (status: AppStatus) => void
   setData: (data: ChallengeData | null) => void
   updateData: () => Promise<void>
+  setConfig: (data: ConfigFile) => void
 }
 
 /**
@@ -28,6 +31,9 @@ export interface AppStore {
 export const useAppStore = create<AppStore>((set) => ({
   appStatus: "idle",
   data: null,
+  config: {
+    challengePath: process.cwd()
+  },
   setStatus: (status): void => set({ appStatus: status }),
   setData: (data): void => set({ data }),
   updateData: async (): Promise<void> => {
@@ -37,5 +43,6 @@ export const useAppStore = create<AppStore>((set) => ({
     } catch (err) {
       throw new Error(`Error updating challenge data: ${err}`)
     }
-  }
+  },
+  setConfig: (data): void => set({ config: data })
 }))
