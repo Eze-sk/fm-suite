@@ -99,6 +99,7 @@ export async function login(url: string): Promise<boolean> {
               SESSION_FILE,
               JSON.stringify({
                 name: token.name,
+                value: token.value,
                 expires_in: token.expires,
               }),
             )
@@ -121,7 +122,7 @@ export async function login(url: string): Promise<boolean> {
       const doc = document as Document
 
       win.focus()
-      ;(doc.body as HTMLElement).focus()
+        ; (doc.body as HTMLElement).focus()
     })
 
     await page.mouse.click(0, 0)
@@ -130,5 +131,7 @@ export async function login(url: string): Promise<boolean> {
   } catch (err) {
     await browser.close()
     throw new Error(`Error logging in, <login> : ${err}`)
+  } finally {
+    await browser.close()
   }
 }
