@@ -32,3 +32,8 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 # Finder (MacOS) folder config
 .DS_Store
+
+# ignore CLI configuration files and directories
+fm-cli.config.json
+test.tsx
+/challenges
