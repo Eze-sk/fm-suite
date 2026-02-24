@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useRef } from 'react'
 
-import { SESSION_FILE } from '@consts/env'
+import { CONFIG_FILE_NAME, SESSION_FILE } from '@consts/env'
 import { waitUntil } from '@utils/waitUntil'
 import { verifySession, login } from '@lib/auth'
 import { getChallenges } from '@lib/challenge.controller'
@@ -8,6 +8,9 @@ import { getValidCache } from '@utils/getValidCache'
 import type { ChallengeData } from '@typings/challengeData'
 import { useAppStore, type AppStatus } from '@/stores/useApp'
 import { useShallow } from 'zustand/shallow'
+import { cosmiconfig } from 'cosmiconfig'
+import { ConfigSchema } from '@/schema/ConfigSchema'
+import path from "node:path"
 
 /**
  * React hook that manages the initialization sequence for the application.
@@ -22,14 +25,25 @@ export function useInitialization(): {
   setPermission: (value: boolean) => void
   data: ChallengeData | null
 } {
-  const { appStatus, data, setData, setStatus } = useAppStore(
+  const { appStatus, data, setData, setStatus, setConfig } = useAppStore(
     useShallow((state) => ({
       appStatus: state.appStatus,
       data: state.data,
       setStatus: state.setStatus,
-      setData: state.setData
+      setData: state.setData,
+      setConfig: state.setConfig
     }))
   )
+
+  const explorer = cosmiconfig(CONFIG_FILE_NAME, {
+    searchPlaces: [
+      'package.json',
+      `.fm-clirc`,
+      `.fm-clirc.json`,
+      `fm-cli.config.json`,
+      `fm-cli.config.js`,
+    ]
+  })
 
   const permissionRef = useRef(false)
 
@@ -70,7 +84,20 @@ export function useInitialization(): {
       const challengeData = await getChallenges({ status: setStatus })
       setData(challengeData)
 
-      setStatus('completed')
+      const result = await explorer.search(process.cwd())
+
+      if (result && !result.isEmpty) {
+        const validatedConfig = ConfigSchema.parse(result.config)
+        const configDir = path.dirname(result.filepath)
+        const absoluteChallengePath = path.resolve(configDir, validatedConfig.challengePath)
+
+        const config = {
+          ...validatedConfig,
+          challengePath: absoluteChallengePath
+        }
+
+        setConfig(config)
+      }
     } catch (err) {
       setStatus('error')
       throw new Error(`INITIALIZATION_FAILED ${err}`)
