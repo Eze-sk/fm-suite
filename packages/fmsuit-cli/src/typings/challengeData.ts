@@ -22,6 +22,8 @@ export interface ChallengeScrap {
   description: string
   downloadLink: string
   updated_at: Date
+  challengeCachePath: string
+  challengeCacheName: string
 }
 
 export interface ChallengeData {
