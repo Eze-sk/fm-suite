@@ -104,6 +104,8 @@ export async function scraping(): Promise<ChallengeData> {
       `Error to the scraper, the mentor frontend challenge, <scraping> : ${err}`,
     )
   } finally {
+    const pages = await browser.pages();
+    await Promise.all(pages.map(page => page.close()));
     await browser.close()
   }
 }

@@ -129,9 +129,10 @@ export async function login(url: string): Promise<boolean> {
 
     return await loginPromise
   } catch (err) {
-    await browser.close()
     throw new Error(`Error logging in, <login> : ${err}`)
   } finally {
+    const pages = await browser.pages();
+    await Promise.all(pages.map(page => page.close()));
     await browser.close()
   }
 }
