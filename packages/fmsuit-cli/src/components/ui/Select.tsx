@@ -11,7 +11,6 @@ type Option = {
 
 export type Selected = {
   id: string
-  value: string
 }
 
 export type SelectType = {
@@ -22,7 +21,7 @@ export type SelectType = {
   nextFocus?: string
   placeholder?: string
   onOpen?: (v: boolean) => void
-  onChange?: (selected: Selected[]) => void
+  onChange?: (selected: Selected) => void
 }
 
 export type SelectHandle = {
@@ -112,12 +111,11 @@ const Select = forwardRef<SelectHandle, SelectType>(({
       setSelectedPath((prev) => [...prev, opt])
       setFocus(firstChild!.id)
     } else {
-      const finalSelection: Selected[] = [...selectedPath, opt].map((item) => ({
-        id: item.id,
-        value: item.value,
-      }))
+      const finalSelection: Selected = {
+        id: opt.id,
+      };
 
-      onChange?.(finalSelection)
+      onChange?.(finalSelection);
       setOpen(false)
       setFocus(nextFocus ?? id)
     }
