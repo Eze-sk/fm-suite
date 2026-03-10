@@ -5,3 +5,5 @@ type ViteTS = `vite-${ViteStack}-ts`;
 type VanillaVite = `vite-${ViteStack}`
 
 export type TechnologySelector = VanillaVite | ViteTS | OtherFrameworks;
+
+export type PackageManagerType = "npm" | "pnpm" | "bun"
