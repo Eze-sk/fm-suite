@@ -1,4 +1,4 @@
-import type { TechnologySelector } from "@typings/technologySelector"
+import type { PackageManagerType, TechnologySelector } from "@typings/technologySelector"
 import { $ } from "bun"
 import { createDir } from "@utils/createDir"
 import path from "node:path"
@@ -6,7 +6,7 @@ import path from "node:path"
 interface InitProjectType {
   dirPath: string
   framework: TechnologySelector
-  packageManager?: "npm" | "pnpm" | "Bun"
+  packageManager: PackageManagerType
 }
 
 /**
@@ -19,7 +19,7 @@ interface InitProjectType {
  * @returns {Promise<{ currentPath: string }>} Object containing the actual path where project was created
  * @throws {Error} If project creation or installation fails
  */
-export async function buildStarter({ dirPath, framework, packageManager }: InitProjectType): Promise<{
+export async function buildStarter({ dirPath, framework, packageManager = "pnpm" }: InitProjectType): Promise<{
   currentPath: string
 }> {
   const { currentPath } = createDir({
@@ -48,7 +48,7 @@ export async function buildStarter({ dirPath, framework, packageManager }: InitP
   };
 
   const installPackages = async (): Promise<void> => {
-    if (packageManager === "Bun") {
+    if (packageManager === "bun") {
       await $`bun install --cwd ${currentPath}`.quiet()
     } else {
       await $`${packageManager} --prefix ${currentPath} install`.quiet()
