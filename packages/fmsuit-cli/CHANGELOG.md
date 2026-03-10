@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-03-10
+
+### Added
+
+- Functionality to start and download challenges.
+- Option to choose the technology for new challenges.
+- New interface components for challenge management.
+
 ## [0.4.0] - 2026-01-23
 
 ### Added
@@ -71,6 +79,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Base dependencies and package configuration
 
 [Unreleased]: https://github.com/eze-sk/fm-suite/compare/v0.4.0...HEAD
+[0.5.0]: https://github.com/eze-sk/fm-suite/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/eze-sk/fm-suite/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/eze-sk/fm-suite/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/eze-sk/fm-suite/compare/v0.1.0...v0.2.0
