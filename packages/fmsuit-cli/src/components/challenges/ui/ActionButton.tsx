@@ -6,18 +6,18 @@ type BtsStatus = Record<StatesChallenge, { color: string, message: string }>
 
 interface Props {
   onAction: () => void
-  setStatus: StatesChallenge
+  getStatus: StatesChallenge
 }
 
 /**
  * ChallengeActionButton component for challenge actions.
  * @param {object} props - The component props.
  * @param {() => void} props.onAction - Callback when the button is pressed.
- * @param {StatesChallenge} props.setStatus - The current status of the challenge.
+ * @param {StatesChallenge} props.getStatus - The current status of the challenge.
  * @returns {React.ReactNode} The rendered action button.
  */
 
-export default function ChallengeActionButton({ onAction, setStatus }: Props): React.ReactNode {
+export default function ChallengeActionButton({ onAction, getStatus }: Props): React.ReactNode {
   const btsStatus: BtsStatus = {
     "pending": {
       color: colors.rose,
@@ -29,7 +29,7 @@ export default function ChallengeActionButton({ onAction, setStatus }: Props): R
     },
     "completed": {
       color: colors.blue.default,
-      message: "Submit Solution"
+      message: "Start Challenge"
     },
     "new_start": {
       color: colors.pink,
@@ -37,8 +37,8 @@ export default function ChallengeActionButton({ onAction, setStatus }: Props): R
     }
   }
 
-  const btsColor = btsStatus[setStatus].color
-  const btsMessage = btsStatus[setStatus].message
+  const btsColor = btsStatus[getStatus].color
+  const btsMessage = btsStatus[getStatus].message
 
   return (
     <FocusElement
@@ -50,6 +50,8 @@ export default function ChallengeActionButton({ onAction, setStatus }: Props): R
       justifyContent="center"
       placeholder={false}
       color={btsColor}
+      marginBottom={1}
+      isDisabled={getStatus === "started"}
     >
       <FocusElement.Text
         italic
