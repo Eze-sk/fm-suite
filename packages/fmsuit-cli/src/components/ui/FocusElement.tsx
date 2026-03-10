@@ -110,13 +110,13 @@ export function Root({
     >
       {addMark && (
         <Text color={finalColor}>
-          {isFocused ? addMark.toString().padEnd(2, ' ') : '  '}
+          {isFocused && !isDisabled ? addMark.toString().padEnd(2, ' ') : '  '}
         </Text>
       )}
       <FocusContext.Provider value={{ finalColor, isFocused }}>
         {children}
       </FocusContext.Provider>
-      {isFocused && placeholder ? (
+      {isFocused && placeholder && !isDisabled ? (
         <Text color="grey" dimColor>
           {placeholder}
         </Text>
