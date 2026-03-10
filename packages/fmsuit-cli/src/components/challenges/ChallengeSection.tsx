@@ -1,16 +1,18 @@
 import type { ChallengeScrap } from '@typings/challengeData'
 import { Box, Text, useInput } from 'ink'
-import PlanTag from './tags/Plan'
-import LanguagesTag from './tags/Languages'
-import DifficultyTag from './tags/Difficulty'
 
-import FocusElement from '@components/ui/FocusElement'
-import Select from '@components/ui/Select'
-import { colors } from '@/colorPalette'
-import { technologies } from '@/config/questions'
-import { useState } from 'react'
-import { useNavigationContext } from '@/contexts/useNavigation'
+import { technologiesQuestions } from '@/config/questions'
+import { useEffect, useState } from 'react'
 import open from 'open'
+import ChallengeActionButton from './ui/ActionButton'
+import HeaderSection from './ui/HeaderSection'
+import { useNavigationContext } from '@/contexts/useNavigation'
+import { updateChallenge } from '@lib/challenge.controller'
+import { useAppStore } from '@/stores/useApp'
+import LoadingDownloadSteps from './ChallengeSectionSteps/LoadingDownload'
+import StartSteps from './ChallengeSectionSteps/Start'
+
+export type StepSection = "start" | "loading"
 
 interface Props {
   challengeData: ChallengeScrap | undefined
@@ -20,12 +22,23 @@ export default function ChallengeSection({
   challengeData,
 }: Props): React.ReactNode {
   const [isInit, setIsInit] = useState(true)
-
   const { setFocus } = useNavigationContext()
+  const updateData = useAppStore((state) => state.updateData)
+  const [step, setStep] = useState<StepSection>("start")
 
-  const action = (): void => {
-    setIsInit(!isInit)
-    setFocus('technologies')
+  const status = challengeData?.status ?? "pending"
+
+  const handleActionChallenge = async (): Promise<void> => {
+    if (status === "pending" || status === "new_start") {
+      setIsInit(!isInit)
+      setFocus(technologiesQuestions.option[0]?.id ?? technologiesQuestions.id)
+      await updateChallenge({
+        id: challengeData?.id ?? 0,
+        key: "status",
+        value: "started"
+      })
+      await updateData()
+    }
   }
 
   useInput((input, key) => {
@@ -36,50 +49,26 @@ export default function ChallengeSection({
 
   return (
     <Box width={80} flexDirection="column">
-      <Box flexDirection="column" marginBottom={1}>
-        <Box
-          justifyContent="space-between"
-          alignItems="center"
-          marginBottom={2}
-        >
-          <Box gap={2}>
-            <PlanTag plan={challengeData?.plan} />
-            {challengeData?.languages.map((l) => (
-              <LanguagesTag language={l} key={l} />
-            ))}
-          </Box>
-          <DifficultyTag level={challengeData?.difficulty} />
-        </Box>
-        <Box gap={1} flexDirection="column">
-          <Text>{challengeData?.title.toUpperCase()}</Text>
-          <Text>{challengeData?.description}</Text>
-        </Box>
-      </Box>
-      <Box height={20} marginTop={1} gap={1} flexDirection="column">
-        <FocusElement
-          id="start-challenge"
-          onAction={action}
-          addMark={false}
-          hasBorder
-          width={25}
-          justifyContent="center"
-          placeholder={false}
-          color={isInit ? colors.rose : colors.blue.light}
-        >
-          <FocusElement.Text
-            italic
-            label={isInit ? 'Start challenge' : 'challenge initiated'}
-          />
-        </FocusElement>
-        <Select
-          isDisabled={isInit}
-          placeholder={
-            isInit
-              ? 'You must start a challenge to choose a technology'
-              : '(Press Enter)'
-          }
-          {...technologies}
-        />
+      <HeaderSection data={challengeData} />
+      <Box height={20} marginTop={1} flexDirection="column">
+        <ChallengeActionButton onAction={handleActionChallenge} getStatus={status} />
+        {
+          step === "start" && (
+            <StartSteps
+              data={challengeData}
+              isInit={isInit}
+              setIsInit={setIsInit}
+              status={status}
+              nextStep={setStep}
+            />
+          )
+        }
+        {
+          step === "loading" && (
+            <LoadingDownloadSteps nextStep={setStep} data={challengeData} />
+          )
+        }
+
       </Box>
       <Box marginLeft={1}>
         <Text color="gray" italic>
