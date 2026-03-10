@@ -143,11 +143,11 @@ const Select = forwardRef<SelectHandle, SelectType>(({
         placeholder={placeholder}
         marginBottom={1}
       >
-        <FocusElement.Text label={`${open ? '⏷' : '▶'} ${title}`} />
+        <FocusElement.Text label={`${open ? '▼' : '▶'} ${title}`} />
       </FocusElement>
       {open &&
-        currentOptions?.map((opt) => (
-          <Box key={opt.id} marginLeft={2}>
+        currentOptions?.map((opt, i, arr) => (
+          <Box key={opt.id} marginLeft={2} marginBottom={i === arr.length - 1 ? 1 : 0}>
             <FocusElement id={opt.id} onAction={() => onSelect(opt)}>
               <Box gap={1}>
                 <FocusElement.Text label={opt.value} bold />
