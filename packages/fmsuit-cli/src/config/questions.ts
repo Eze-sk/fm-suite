@@ -1,6 +1,21 @@
-import type { SelectType } from '@components/ui/Select'
+import type { PackageManagerType, TechnologySelector } from '@typings/technologySelector'
 
-export const technologies: SelectType = {
+interface Select {
+  id: string
+  title: string
+}
+
+interface TecOptions {
+  id: "vite" | TechnologySelector
+  value: string
+  children?: TecOptions[]
+}
+
+interface TechnologiesType extends Select {
+  option: TecOptions[]
+}
+
+export const technologiesQuestions: TechnologiesType = {
   id: 'technologies',
   title: 'Technologies',
   option: [
@@ -9,34 +24,52 @@ export const technologies: SelectType = {
       value: 'Vite (Recommended)',
       children: [
         { id: 'vite-react-ts', value: 'React + TypeScript' },
-        { id: 'vite-react-js', value: 'React + JavaScript' },
+        { id: 'vite-react', value: 'React + JavaScript' },
         { id: 'vite-vue-ts', value: 'Vue + TypeScript' },
         { id: 'vite-vanilla-ts', value: 'Vanilla TypeScript' },
-        { id: 'vite-vanilla-js', value: 'Vanilla JavaScript' },
+        { id: 'vite-vanilla', value: 'Vanilla JavaScript' },
       ],
     },
     {
       id: 'nextjs',
       value: 'Next.js (App Router)',
-      children: [
-        { id: 'next-ts-tailwind', value: 'TypeScript + Tailwind CSS' },
-        { id: 'next-ts-css-modules', value: 'TypeScript + CSS Modules' },
-      ],
     },
     {
       id: 'astro',
       value: 'Astro',
-      children: [
-        { id: 'astro-minimal', value: 'Minimal (No framework)' },
-        { id: 'astro-react', value: 'Astro + React' },
-      ],
     },
     {
-      id: 'no-builder',
+      id: 'empty',
       value: 'No Framework / No Builder',
-      children: [
-        { id: 'pure-html-css-js', value: 'Pure HTML/CSS/JS (Cdn based)' },
-      ],
     },
   ],
+}
+
+interface PkgMgrQuestOptions {
+  id: PackageManagerType
+  value: string
+  children?: TecOptions[]
+}
+
+interface PkgMgrQuestType extends Select {
+  option: PkgMgrQuestOptions[]
+}
+
+export const packageManagerQuestion: PkgMgrQuestType = {
+  id: "packageManager",
+  title: "package manager",
+  option: [
+    {
+      id: "pnpm",
+      value: "pnpm",
+    },
+    {
+      id: "bun",
+      value: "bun",
+    },
+    {
+      id: "npm",
+      value: "npm",
+    },
+  ]
 }
