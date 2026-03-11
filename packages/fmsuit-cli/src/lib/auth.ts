@@ -122,7 +122,7 @@ export async function login(url: string): Promise<boolean> {
       const doc = document as Document
 
       win.focus()
-        ; (doc.body as HTMLElement).focus()
+      ;(doc.body as HTMLElement).focus()
     })
 
     await page.mouse.click(0, 0)
@@ -131,8 +131,8 @@ export async function login(url: string): Promise<boolean> {
   } catch (err) {
     throw new Error(`Error logging in, <login> : ${err}`)
   } finally {
-    const pages = await browser.pages();
-    await Promise.all(pages.map(page => page.close()));
+    const pages = await browser.pages()
+    await Promise.all(pages.map((page) => page.close()))
     await browser.close()
   }
 }

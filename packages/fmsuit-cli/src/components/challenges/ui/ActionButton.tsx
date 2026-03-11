@@ -1,8 +1,8 @@
-import FocusElement from "@components/ui/FocusElement";
-import { colors } from "@/colorPalette";
-import type { StatesChallenge } from "@typings/challengeData";
+import FocusElement from '@components/ui/FocusElement'
+import { colors } from '@/colorPalette'
+import type { StatesChallenge } from '@typings/challengeData'
 
-type BtsStatus = Record<StatesChallenge, { color: string, message: string }>
+type BtsStatus = Record<StatesChallenge, { color: string; message: string }>
 
 interface Props {
   onAction: () => void
@@ -17,24 +17,27 @@ interface Props {
  * @returns {React.ReactNode} The rendered action button.
  */
 
-export default function ChallengeActionButton({ onAction, getStatus }: Props): React.ReactNode {
+export default function ChallengeActionButton({
+  onAction,
+  getStatus,
+}: Props): React.ReactNode {
   const btsStatus: BtsStatus = {
-    "pending": {
+    pending: {
       color: colors.rose,
-      message: "Start Challenge"
+      message: 'Start Challenge',
     },
-    "started": {
+    started: {
       color: colors.blue.light,
-      message: "starting..."
+      message: 'starting...',
     },
-    "completed": {
+    completed: {
       color: colors.blue.default,
-      message: "Start Challenge"
+      message: 'Start Challenge',
     },
-    "new_start": {
+    new_start: {
       color: colors.pink,
-      message: "Start over"
-    }
+      message: 'Start over',
+    },
   }
 
   const btsColor = btsStatus[getStatus].color
@@ -51,12 +54,9 @@ export default function ChallengeActionButton({ onAction, getStatus }: Props): R
       placeholder={false}
       color={btsColor}
       marginBottom={1}
-      isDisabled={getStatus === "started"}
+      isDisabled={getStatus === 'started'}
     >
-      <FocusElement.Text
-        italic
-        label={btsMessage}
-      />
+      <FocusElement.Text italic label={btsMessage} />
     </FocusElement>
   )
 }

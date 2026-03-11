@@ -10,7 +10,7 @@ import { useAppStore, type AppStatus } from '@/stores/useApp'
 import { useShallow } from 'zustand/shallow'
 import { cosmiconfig } from 'cosmiconfig'
 import { ConfigSchema } from '@/schema/ConfigSchema'
-import path from "node:path"
+import path from 'node:path'
 
 /**
  * React hook that manages the initialization sequence for the application.
@@ -31,8 +31,8 @@ export function useInitialization(): {
       data: state.data,
       setStatus: state.setStatus,
       setData: state.setData,
-      setConfig: state.setConfig
-    }))
+      setConfig: state.setConfig,
+    })),
   )
 
   const explorer = cosmiconfig(CONFIG_FILE_NAME, {
@@ -42,7 +42,7 @@ export function useInitialization(): {
       `.fm-clirc.json`,
       `fm-cli.config.json`,
       `fm-cli.config.js`,
-    ]
+    ],
   })
 
   const permissionRef = useRef(false)
@@ -89,11 +89,14 @@ export function useInitialization(): {
       if (result && !result.isEmpty) {
         const validatedConfig = ConfigSchema.parse(result.config)
         const configDir = path.dirname(result.filepath)
-        const absoluteChallengePath = path.resolve(configDir, validatedConfig.challengePath)
+        const absoluteChallengePath = path.resolve(
+          configDir,
+          validatedConfig.challengePath,
+        )
 
         const config = {
           ...validatedConfig,
-          challengePath: absoluteChallengePath
+          challengePath: absoluteChallengePath,
         }
 
         setConfig(config)

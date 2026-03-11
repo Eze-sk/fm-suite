@@ -1,11 +1,11 @@
-import { getPublicFolderPath } from "@utils/getPublicFolderPath";
-import { readdir, cp, stat } from "node:fs/promises"
-import fs from "node:fs"
-import { join } from "node:path";
-import { extractHtmlData } from "./extractHtmlData";
-import { frameworkAdapters } from "@/templates/frameworkAdapters";
-import { formatCode } from "@utils/formatCode";
-import type { TechnologySelector } from "@typings/technologySelector";
+import { getPublicFolderPath } from '@utils/getPublicFolderPath'
+import { readdir, cp, stat } from 'node:fs/promises'
+import fs from 'node:fs'
+import { join } from 'node:path'
+import { extractHtmlData } from './extractHtmlData'
+import { frameworkAdapters } from '@/templates/frameworkAdapters'
+import { formatCode } from '@utils/formatCode'
+import type { TechnologySelector } from '@typings/technologySelector'
 
 interface MergeType {
   originalDir: string
@@ -20,18 +20,21 @@ interface MergeType {
  * @param {string} options.destinationDir - Target directory to copy files to
  * @returns {Promise<void>}
  */
-export async function copyPasteFiles({ destinationDir, originalDir }: MergeType): Promise<void> {
+export async function copyPasteFiles({
+  destinationDir,
+  originalDir,
+}: MergeType): Promise<void> {
   const files = await readdir(originalDir)
-  const validextensions = [".md", ".json", ".jpg"];
+  const validextensions = ['.md', '.json', '.jpg']
 
-  const readmePath = join(destinationDir, "README.md")
+  const readmePath = join(destinationDir, 'README.md')
 
   if (fs.existsSync(readmePath)) {
     Bun.file(readmePath).delete()
   }
 
   const promises = files.map(async (nameFile) => {
-    const isValid = validextensions.some(ex => nameFile.endsWith(ex))
+    const isValid = validextensions.some((ex) => nameFile.endsWith(ex))
 
     if (isValid) {
       const originalPath = join(originalDir, nameFile)
@@ -57,9 +60,13 @@ interface CopyPasteFoldersType extends MergeType {
  * @param {boolean} [options.copyAll=false] - If false, only copies 'assets' folder; if true, copies all folders
  * @returns {Promise<void>}
  */
-export async function copyPasteFolders({ destinationDir, originalDir, copyAll = false }: CopyPasteFoldersType): Promise<void> {
+export async function copyPasteFolders({
+  destinationDir,
+  originalDir,
+  copyAll = false,
+}: CopyPasteFoldersType): Promise<void> {
   const publicFolder = getPublicFolderPath({
-    pathProject: destinationDir
+    pathProject: destinationDir,
   })
 
   const input = await readdir(originalDir)
@@ -69,19 +76,20 @@ export async function copyPasteFolders({ destinationDir, originalDir, copyAll = 
     const itemStat = await stat(originalPath)
 
     if (itemStat.isDirectory()) {
-      const isSpecificFolder = itemName === "assets";
+      const isSpecificFolder = itemName === 'assets'
 
       if (!copyAll && !isSpecificFolder) return
 
-      const cleanName = itemName.replace("-main", "");
+      const cleanName = itemName.replace('-main', '')
 
-      const targetBase = (!copyAll && isSpecificFolder) ? publicFolder : destinationDir;
-      const destinationPath = join(targetBase, cleanName);
+      const targetBase =
+        !copyAll && isSpecificFolder ? publicFolder : destinationDir
+      const destinationPath = join(targetBase, cleanName)
 
       await cp(originalPath, destinationPath, {
         recursive: true,
-        force: true
-      });
+        force: true,
+      })
     }
   })
 
@@ -102,13 +110,17 @@ type Framework = {
  * @returns {Promise<void>}
  * @throws {Error} If the framework is not supported or if file operations fail
  */
-export async function migrateHtmlToFramework({ destinationDir, originalDir, framework }: Framework & MergeType): Promise<void> {
-  const orignalHtml = join(originalDir, "index.html")
+export async function migrateHtmlToFramework({
+  destinationDir,
+  originalDir,
+  framework,
+}: Framework & MergeType): Promise<void> {
+  const orignalHtml = join(originalDir, 'index.html')
   const htmlData = await extractHtmlData({
-    path: orignalHtml
+    path: orignalHtml,
   })
 
-  const baseTech = framework.split("-")[0] as keyof typeof frameworkAdapters
+  const baseTech = framework.split('-')[0] as keyof typeof frameworkAdapters
 
   const templateGenerator = frameworkAdapters[baseTech]
 
@@ -129,7 +141,7 @@ export async function migrateHtmlToFramework({ destinationDir, originalDir, fram
 
     const formattedCode = await formatCode({
       code: item.code,
-      fileName: item.file
+      fileName: item.file,
     })
 
     try {
@@ -152,11 +164,11 @@ export async function migrateHtmlToFramework({ destinationDir, originalDir, fram
 export async function mergeChallenge({
   originalDir,
   destinationDir,
-  framework
+  framework,
 }: Framework & MergeType): Promise<void> {
   const attributes = {
     destinationDir,
-    originalDir
+    originalDir,
   }
 
   await Promise.all([
@@ -164,7 +176,7 @@ export async function mergeChallenge({
     copyPasteFolders(attributes),
     migrateHtmlToFramework({
       ...attributes,
-      framework
-    })
+      framework,
+    }),
   ])
 }

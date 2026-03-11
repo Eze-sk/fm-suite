@@ -15,7 +15,9 @@ interface getChallengesTypes {
  * @param {(status: AppStatus) => void} [props.status] - Callback for updating the current operation status.
  * @returns {Promise<ChallengeData>} An object containing challenge data.
  */
-export async function getChallenges({ status }: getChallengesTypes = {}): Promise<ChallengeData> {
+export async function getChallenges({
+  status,
+}: getChallengesTypes = {}): Promise<ChallengeData> {
   const cacheChallenges = await getValidCache(CACHE_FILE)
 
   if (!cacheChallenges) {
@@ -27,7 +29,9 @@ export async function getChallenges({ status }: getChallengesTypes = {}): Promis
   return await cacheFile.json()
 }
 
-interface updateChallengeTypes<K extends keyof ChallengeScrap = keyof ChallengeScrap> {
+interface updateChallengeTypes<
+  K extends keyof ChallengeScrap = keyof ChallengeScrap,
+> {
   id: number
   key: K
   value: ChallengeScrap[K]
@@ -41,27 +45,31 @@ interface updateChallengeTypes<K extends keyof ChallengeScrap = keyof ChallengeS
  * @param {ChallengeScrap[K]} props.value - The new value for the specified property.
  * @returns {Promise<void>} A Promise that resolves when the challenge is updated.
  */
-export async function updateChallenge<K extends keyof ChallengeScrap>({ id, key, value }: updateChallengeTypes<K>): Promise<void> {
+export async function updateChallenge<K extends keyof ChallengeScrap>({
+  id,
+  key,
+  value,
+}: updateChallengeTypes<K>): Promise<void> {
   const cacheFile = Bun.file(CACHE_FILE)
 
   if (!(await cacheFile.exists())) {
-    console.error("The cache file does not exist.");
-    return;
+    console.error('The cache file does not exist.')
+    return
   }
 
-  const data = await cacheFile.json() as ChallengeData
-  const index = data.challenges.findIndex(c => c.id === id)
+  const data = (await cacheFile.json()) as ChallengeData
+  const index = data.challenges.findIndex((c) => c.id === id)
 
-  const challenge = data.challenges[index];
+  const challenge = data.challenges[index]
 
   if (challenge) {
-    challenge[key] = value;
+    challenge[key] = value
 
-    challenge.updated_at = new Date();
-    data.last_updated = new Date();
+    challenge.updated_at = new Date()
+    data.last_updated = new Date()
 
     await Bun.write(CACHE_FILE, JSON.stringify(data, null, 2))
   } else {
-    console.warn(`ID ${id} not found.`);
+    console.warn(`ID ${id} not found.`)
   }
 }

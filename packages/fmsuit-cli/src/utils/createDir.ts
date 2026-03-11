@@ -1,7 +1,7 @@
-import fs from "node:fs"
+import fs from 'node:fs'
 
 interface CreateDirType {
-  basePath: string,
+  basePath: string
   name: string
 }
 
@@ -13,11 +13,13 @@ interface CreateDirType {
  * @param {string} options.name - The name to append if the base path exists
  * @returns {{ currentPath: string }} Object containing the final created directory path
  */
-export function createDir({ basePath, name }: CreateDirType): { currentPath: string } {
+export function createDir({ basePath, name }: CreateDirType): {
+  currentPath: string
+} {
   let currentPath = basePath
 
   if (fs.existsSync(currentPath)) {
-    currentPath = `${basePath}-${name}`;
+    currentPath = `${basePath}-${name}`
   }
 
   if (fs.existsSync(currentPath)) {
@@ -32,6 +34,6 @@ export function createDir({ basePath, name }: CreateDirType): { currentPath: str
     currentPath = tempPath
   }
 
-  fs.mkdirSync(currentPath, { recursive: true });
-  return { currentPath };
+  fs.mkdirSync(currentPath, { recursive: true })
+  return { currentPath }
 }

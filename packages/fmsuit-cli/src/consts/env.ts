@@ -16,4 +16,4 @@ export const BROWSER_PATH = findChromiumBasedBrowser(browser.name as Browser)
 
 export const FM_URL = 'https://www.frontendmentor.io'
 
-export const CONFIG_FILE_NAME = "fm-cli"
+export const CONFIG_FILE_NAME = 'fm-cli'

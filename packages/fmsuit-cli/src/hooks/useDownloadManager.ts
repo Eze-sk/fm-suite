@@ -1,11 +1,14 @@
-import { join } from "node:path";
-import { useAppStore } from "@/stores/useApp"
-import { buildStarter } from "@lib/buildStarter"
-import type { DlChallengeReturn } from "@lib/downloadChallenge"
-import { copyPasteFolders, mergeChallenge } from "@lib/mergeChallenge"
-import type { PackageManagerType, TechnologySelector } from "@typings/technologySelector"
-import { useEffect, useRef, useState } from "react"
-import type { ChallengeScrap } from "@typings/challengeData";
+import { join } from 'node:path'
+import { useAppStore } from '@/stores/useApp'
+import { buildStarter } from '@lib/buildStarter'
+import type { DlChallengeReturn } from '@lib/downloadChallenge'
+import { copyPasteFolders, mergeChallenge } from '@lib/mergeChallenge'
+import type {
+  PackageManagerType,
+  TechnologySelector,
+} from '@typings/technologySelector'
+import { useEffect, useRef, useState } from 'react'
+import type { ChallengeScrap } from '@typings/challengeData'
 
 /**
  * Interface for the props of the useDownloadChallenge hook.
@@ -27,7 +30,12 @@ interface UseDlChallengeType {
  * @param {UseDlChallengeType} { downloadLink, technologie, challengeData, packageManager } - The props for the hook.
  * @returns {{ startDownload: () => void }} An object containing the startDownload function.
  */
-export function useDownloadChallenge({ downloadLink, technologie, challengeData, packageManager }: UseDlChallengeType): {
+export function useDownloadChallenge({
+  downloadLink,
+  technologie,
+  challengeData,
+  packageManager,
+}: UseDlChallengeType): {
   startDownload: () => void
 } {
   const updateStep = useAppStore((state) => state.updateDownloadStep)
@@ -38,7 +46,9 @@ export function useDownloadChallenge({ downloadLink, technologie, challengeData,
   const dlWorkerRef = useRef<Worker | null>(null)
 
   useEffect(() => {
-    const worker = new Worker(new URL("../workers/downloadWorker.ts", import.meta.url))
+    const worker = new Worker(
+      new URL('../workers/downloadWorker.ts', import.meta.url),
+    )
     dlWorkerRef.current = worker
 
     if (!challengeData?.challengeCachePath) {
@@ -46,8 +56,8 @@ export function useDownloadChallenge({ downloadLink, technologie, challengeData,
         setCacheFolder(event.data)
       }
     } else {
-      const cacheName = challengeData?.challengeCacheName ?? ""
-      const cachePath = challengeData?.challengeCachePath ?? ""
+      const cacheName = challengeData?.challengeCacheName ?? ''
+      const cachePath = challengeData?.challengeCachePath ?? ''
 
       setCacheFolder({ cacheName, cachePath })
     }
@@ -60,54 +70,53 @@ export function useDownloadChallenge({ downloadLink, technologie, challengeData,
   const startDownload = async (): Promise<void> => {
     try {
       if (!challengeData?.challengeCachePath) {
-        updateStep("DOWNLOAD", "loading")
+        updateStep('DOWNLOAD', 'loading')
         await new Promise((resolve, reject) => {
           dlWorkerRef.current?.postMessage({
             downloadUrl: downloadLink,
-            idChallenge: challengeData?.id
+            idChallenge: challengeData?.id,
           })
 
           dlWorkerRef.current!.onmessage = (e): void => {
-            if (e.data.success) resolve(true);
-            else reject(new Error("Worker failed"));
-          };
+            if (e.data.success) resolve(true)
+            else reject(new Error('Worker failed'))
+          }
         })
-        updateStep("DOWNLOAD", "completed")
+        updateStep('DOWNLOAD', 'completed')
       }
 
-      const destinationDir = join(challengePath, cacheFolder?.cacheName ?? "")
+      const destinationDir = join(challengePath, cacheFolder?.cacheName ?? '')
 
-      if (technologie !== "empty") {
-        updateStep("BUILD", "loading")
+      if (technologie !== 'empty') {
+        updateStep('BUILD', 'loading')
 
         await buildStarter({
-          framework: technologie ?? "empty",
+          framework: technologie ?? 'empty',
           dirPath: destinationDir,
-          packageManager: packageManager ?? "pnpm"
+          packageManager: packageManager ?? 'pnpm',
         })
 
-        updateStep("BUILD", "completed")
+        updateStep('BUILD', 'completed')
 
         if (cacheFolder) {
-          updateStep("MERGE", "completed")
+          updateStep('MERGE', 'completed')
 
           await mergeChallenge({
             destinationDir,
-            originalDir: cacheFolder?.cachePath ?? "",
-            framework: technologie ?? "empty"
+            originalDir: cacheFolder?.cachePath ?? '',
+            framework: technologie ?? 'empty',
           })
 
-          updateStep("MERGE", "completed")
+          updateStep('MERGE', 'completed')
         }
       } else {
-        updateStep("BUILD", "pending")
+        updateStep('BUILD', 'pending')
         copyPasteFolders({
           destinationDir,
-          originalDir: cacheFolder?.cachePath ?? ""
+          originalDir: cacheFolder?.cachePath ?? '',
         })
-        updateStep("BUILD", "completed")
+        updateStep('BUILD', 'completed')
       }
-
     } catch (err) {
       throw new Error(`DOWNLOAD_FAILED ${err}`)
     }

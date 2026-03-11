@@ -1,7 +1,7 @@
-import { getChallenges } from "@lib/challenge.controller"
-import type { ChallengeData } from "@typings/challengeData"
-import type { ConfigFile } from "@typings/ConfigFile"
-import { create } from "zustand"
+import { getChallenges } from '@lib/challenge.controller'
+import type { ChallengeData } from '@typings/challengeData'
+import type { ConfigFile } from '@typings/ConfigFile'
+import { create } from 'zustand'
 
 export type AppStatus =
   | 'idle'
@@ -17,9 +17,9 @@ export type AppStatus =
 export type DownloadStepStatus = 'pending' | 'loading' | 'completed'
 
 export interface DownloadStep {
-  id: string;
-  label: string;
-  status: DownloadStepStatus;
+  id: string
+  label: string
+  status: DownloadStepStatus
 }
 
 export interface AppStore {
@@ -39,7 +39,7 @@ export interface AppStore {
  * Provides status, data, and update methods for the app.
  */
 export const useAppStore = create<AppStore>((set) => ({
-  appStatus: "idle",
+  appStatus: 'idle',
   downloadStep: [
     { id: 'DOWNLOAD', label: 'Download challenge', status: 'pending' },
     { id: 'BUILD', label: 'Starting the challenge', status: 'pending' },
@@ -47,13 +47,13 @@ export const useAppStore = create<AppStore>((set) => ({
   ],
   data: null,
   config: {
-    challengePath: process.cwd()
+    challengePath: process.cwd(),
   },
   setStatus: (status): void => set({ appStatus: status }),
   updateDownloadStep: (id, status): void => {
     set((state) => ({
       downloadStep: state.downloadStep.map((s) =>
-        s.id === id ? { ...s, status } : s
+        s.id === id ? { ...s, status } : s,
       ),
     }))
   },
@@ -66,5 +66,5 @@ export const useAppStore = create<AppStore>((set) => ({
       throw new Error(`Error updating challenge data: ${err}`)
     }
   },
-  setConfig: (data): void => set({ config: data })
+  setConfig: (data): void => set({ config: data }),
 }))

@@ -97,6 +97,10 @@ export default function SearchSection({
   const visibleChallenges = search.slice(offset, offset + visibleItems)
 
   useInput((input, key) => {
+    if (key.return) {
+      onSelectResult(search[selectedIndex])
+    }
+
     if (input) return
 
     if (key.upArrow) {
@@ -105,10 +109,6 @@ export default function SearchSection({
 
     if (key.downArrow) {
       setSelectedIndex((prev) => (prev > 0 ? prev - 1 : prev))
-    }
-
-    if (key.return) {
-      onSelectResult(search[selectedIndex])
     }
   })
 
@@ -132,9 +132,12 @@ export default function SearchSection({
                 const isActive = search.indexOf(c) === selectedIndex
 
                 return (
-                  <Box flexDirection="column-reverse" key={c.id}>
-                    <ChallengeCardSearch isFocused={isActive} {...c} />
-                  </Box>
+                  <ChallengeCardSearch
+                    isFocused={isActive}
+                    plan={c.status}
+                    {...c}
+                    key={c.id}
+                  />
                 )
               })}
             </Box>

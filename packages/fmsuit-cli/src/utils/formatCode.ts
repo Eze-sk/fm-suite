@@ -1,4 +1,4 @@
-import prettier from "prettier"
+import prettier from 'prettier'
 
 interface FormatCodeType {
   code: string
@@ -13,27 +13,27 @@ interface FormatCodeType {
  * @param {string} options.fileName - The file name to determine the appropriate parser
  * @returns {Promise<string>} The formatted code, or the original code if formatting fails
  */
-export async function formatCode({ code, fileName }: FormatCodeType): Promise<string> {
-  const extension = fileName.split(".").pop()
-  let parser = "babel-ts"
+export async function formatCode({
+  code,
+  fileName,
+}: FormatCodeType): Promise<string> {
+  const extension = fileName.split('.').pop()
+  let parser = 'babel-ts'
 
-  if (extension === "astro") parser = "astro"
-  if (extension === "html") parser = "html"
+  if (extension === 'astro') parser = 'astro'
+  if (extension === 'html') parser = 'html'
 
   try {
-    return await prettier.format(
-      code,
-      {
-        parser,
-        plugins: ["prettier-plugin-astro"],
-        semi: true,
-        singleQuote: false,
-        tabWidth: 2,
-        htmlWhitespaceSensitivity: "ignore",
-        printWidth: 120,
-        bracketSameLine: true,
-      }
-    )
+    return await prettier.format(code, {
+      parser,
+      plugins: ['prettier-plugin-astro'],
+      semi: true,
+      singleQuote: false,
+      tabWidth: 2,
+      htmlWhitespaceSensitivity: 'ignore',
+      printWidth: 120,
+      bracketSameLine: true,
+    })
   } catch (err) {
     console.error(`Formatting error: ${err}`)
     return code

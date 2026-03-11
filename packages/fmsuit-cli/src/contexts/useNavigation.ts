@@ -74,7 +74,7 @@ export function useNavigation({ id, onSelect }: Props): { isFocused: boolean } {
 
   useEffect(() => {
     const handle = (): void => {
-      onSelectRef.current?.();
+      onSelectRef.current?.()
     }
 
     register(id, handle)

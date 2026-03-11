@@ -25,8 +25,8 @@ export type SelectType = {
 }
 
 export type SelectHandle = {
-  openMenu: () => void;
-  closeMenu: () => void;
+  openMenu: () => void
+  closeMenu: () => void
 }
 
 /**
@@ -65,99 +65,98 @@ export type SelectHandle = {
  *   nextFocus="save-button"
  * />
  */
-const Select = forwardRef<SelectHandle, SelectType>(({
-  id,
-  title,
-  option,
-  isDisabled,
-  nextFocus,
-  placeholder,
-  onOpen,
-  onChange,
-}, ref) => {
-  const [open, setOpen] = useState(false)
-  const [navigationStack, setNavigationStack] = useState<Option[][]>([option])
-  const [selectedPath, setSelectedPath] = useState<Option[]>([])
+const Select = forwardRef<SelectHandle, SelectType>(
+  (
+    { id, title, option, isDisabled, nextFocus, placeholder, onOpen, onChange },
+    ref,
+  ) => {
+    const [open, setOpen] = useState(false)
+    const [navigationStack, setNavigationStack] = useState<Option[][]>([option])
+    const [selectedPath, setSelectedPath] = useState<Option[]>([])
 
-  const { setFocus } = useNavigationContext()
+    const { setFocus } = useNavigationContext()
 
-  const currentOptions = navigationStack[navigationStack.length - 1]
+    const currentOptions = navigationStack[navigationStack.length - 1]
 
-  useImperativeHandle(ref, () => ({
-    openMenu: (): void => {
-      setOpen(true);
-      setNavigationStack([option]);
-    },
-    closeMenu: (): void => setOpen(false)
-  }))
+    useImperativeHandle(ref, () => ({
+      openMenu: (): void => {
+        setOpen(true)
+        setNavigationStack([option])
+      },
+      closeMenu: (): void => setOpen(false),
+    }))
 
-  const toggleMenu = (): void => {
-    if (isDisabled) return
-    const nextState = !open;
-    setOpen(nextState);
-    if (nextState) {
-      setNavigationStack([option]);
-      onOpen?.(open);
-    }
-  }
-
-  const onSelect = (opt: Option): void => {
-    const { children } = opt
-
-    if (children && children.length > 0) {
-      const [firstChild] = children
-
-      setNavigationStack((prev) => [...prev, children])
-      setSelectedPath((prev) => [...prev, opt])
-      setFocus(firstChild!.id)
-    } else {
-      const finalSelection: Selected = {
-        id: opt.id,
-      };
-
-      onChange?.(finalSelection);
-      setOpen(false)
-      setFocus(nextFocus ?? id)
-    }
-  }
-
-  useInput((_, key) => {
-    if (navigationStack.length > 1 && key.tab) {
-      const parentOption = selectedPath[selectedPath.length - 1]
-
-      setNavigationStack(navigationStack.slice(0, -1))
-      setSelectedPath(selectedPath.slice(0, -1))
-
-      if (parentOption) {
-        setFocus(parentOption.id)
+    const toggleMenu = (): void => {
+      if (isDisabled) return
+      const nextState = !open
+      setOpen(nextState)
+      if (nextState) {
+        setNavigationStack([option])
+        onOpen?.(open)
       }
     }
-  })
 
-  return (
-    <Box flexDirection="column">
-      <FocusElement
-        id={id}
-        onAction={toggleMenu}
-        isDisabled={isDisabled}
-        placeholder={placeholder}
-        marginBottom={1}
-      >
-        <FocusElement.Text label={`${open ? '▼' : '▶'} ${title}`} />
-      </FocusElement>
-      {open &&
-        currentOptions?.map((opt, i, arr) => (
-          <Box key={opt.id} marginLeft={2} marginBottom={i === arr.length - 1 ? 1 : 0}>
-            <FocusElement id={opt.id} onAction={() => onSelect(opt)}>
-              <Box gap={1}>
-                <FocusElement.Text label={opt.value} bold />
-              </Box>
-            </FocusElement>
-          </Box>
-        ))
+    const onSelect = (opt: Option): void => {
+      const { children } = opt
+
+      if (children && children.length > 0) {
+        const [firstChild] = children
+
+        setNavigationStack((prev) => [...prev, children])
+        setSelectedPath((prev) => [...prev, opt])
+        setFocus(firstChild!.id)
+      } else {
+        const finalSelection: Selected = {
+          id: opt.id,
+        }
+
+        onChange?.(finalSelection)
+        setOpen(false)
+        setFocus(nextFocus ?? id)
       }
-    </Box>
-  )
-})
+    }
+
+    useInput((_, key) => {
+      if (navigationStack.length > 1 && key.tab) {
+        const parentOption = selectedPath[selectedPath.length - 1]
+
+        setNavigationStack(navigationStack.slice(0, -1))
+        setSelectedPath(selectedPath.slice(0, -1))
+
+        if (parentOption) {
+          setFocus(parentOption.id)
+        }
+      }
+    })
+
+    return (
+      <Box flexDirection="column">
+        <FocusElement
+          id={id}
+          onAction={toggleMenu}
+          isDisabled={isDisabled}
+          placeholder={placeholder}
+          marginBottom={1}
+        >
+          <FocusElement.Text label={`${open ? '▼' : '▶'} ${title}`} />
+        </FocusElement>
+        {open &&
+          currentOptions?.map((opt, i, arr) => (
+            <Box
+              key={opt.id}
+              marginLeft={2}
+              marginBottom={i === arr.length - 1 ? 1 : 0}
+            >
+              <FocusElement id={opt.id} onAction={() => onSelect(opt)}>
+                <Box gap={1}>
+                  <FocusElement.Text label={opt.value} bold />
+                </Box>
+              </FocusElement>
+            </Box>
+          ))}
+      </Box>
+    )
+  },
+)
 
 export default Select

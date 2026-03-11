@@ -1,7 +1,10 @@
-import type { PackageManagerType, TechnologySelector } from "@typings/technologySelector"
-import { $ } from "bun"
-import { createDir } from "@utils/createDir"
-import path from "node:path"
+import type {
+  PackageManagerType,
+  TechnologySelector,
+} from '@typings/technologySelector'
+import { $ } from 'bun'
+import { createDir } from '@utils/createDir'
+import path from 'node:path'
 
 interface InitProjectType {
   dirPath: string
@@ -19,49 +22,66 @@ interface InitProjectType {
  * @returns {Promise<{ currentPath: string }>} Object containing the actual path where project was created
  * @throws {Error} If project creation or installation fails
  */
-export async function buildStarter({ dirPath, framework, packageManager = "pnpm" }: InitProjectType): Promise<{
+export async function buildStarter({
+  dirPath,
+  framework,
+  packageManager = 'pnpm',
+}: InitProjectType): Promise<{
   currentPath: string
 }> {
   const { currentPath } = createDir({
     basePath: dirPath,
-    name: framework
+    name: framework,
   })
 
-  const parentDir = path.dirname(currentPath);
-  const projectName = path.basename(currentPath);
+  const parentDir = path.dirname(currentPath)
+  const projectName = path.basename(currentPath)
 
   const getArgs = (): string[] => {
-    if (framework.includes("vite")) {
-      const template = framework.replace("vite-", "");
-      return ["vite@latest", projectName, "--template", "--no-interactive", template];
+    if (framework.includes('vite')) {
+      const template = framework.replace('vite-', '')
+      return [
+        'vite@latest',
+        projectName,
+        '--template',
+        '--no-interactive',
+        template,
+      ]
     }
 
-    if (framework === "nextjs") {
-      return ["next-app@latest", currentPath, "--yes"];
+    if (framework === 'nextjs') {
+      return ['next-app@latest', currentPath, '--yes']
     }
 
-    if (framework === "astro") {
-      return ["astro@latest", currentPath, "--template", "minimal", "--install", "--no-git"];
+    if (framework === 'astro') {
+      return [
+        'astro@latest',
+        currentPath,
+        '--template',
+        'minimal',
+        '--install',
+        '--no-git',
+      ]
     }
 
-    return ["next-app@latest", currentPath, "--yes"]
-  };
+    return ['next-app@latest', currentPath, '--yes']
+  }
 
   const installPackages = async (): Promise<void> => {
-    if (packageManager === "bun") {
+    if (packageManager === 'bun') {
       await $`bun install --cwd ${currentPath}`.quiet()
     } else {
       await $`${packageManager} --prefix ${currentPath} install`.quiet()
     }
   }
 
-  const args = getArgs();
+  const args = getArgs()
 
   try {
-    if (framework.includes("vite")) {
-      await $`${packageManager} create ${args}`.cwd(parentDir).quiet();
+    if (framework.includes('vite')) {
+      await $`${packageManager} create ${args}`.cwd(parentDir).quiet()
     } else {
-      await $`${packageManager} create ${args}`.quiet();
+      await $`${packageManager} create ${args}`.quiet()
     }
 
     await installPackages()

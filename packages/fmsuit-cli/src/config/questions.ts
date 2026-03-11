@@ -1,4 +1,7 @@
-import type { PackageManagerType, TechnologySelector } from '@typings/technologySelector'
+import type {
+  PackageManagerType,
+  TechnologySelector,
+} from '@typings/technologySelector'
 
 interface Select {
   id: string
@@ -6,7 +9,7 @@ interface Select {
 }
 
 interface TecOptions {
-  id: "vite" | TechnologySelector
+  id: 'vite' | TechnologySelector
   value: string
   children?: TecOptions[]
 }
@@ -56,20 +59,20 @@ interface PkgMgrQuestType extends Select {
 }
 
 export const packageManagerQuestion: PkgMgrQuestType = {
-  id: "packageManager",
-  title: "package manager",
+  id: 'packageManager',
+  title: 'package manager',
   option: [
     {
-      id: "pnpm",
-      value: "pnpm",
+      id: 'pnpm',
+      value: 'pnpm',
     },
     {
-      id: "bun",
-      value: "bun",
+      id: 'bun',
+      value: 'bun',
     },
     {
-      id: "npm",
-      value: "npm",
+      id: 'npm',
+      value: 'npm',
     },
-  ]
+  ],
 }

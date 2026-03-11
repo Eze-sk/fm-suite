@@ -1,16 +1,22 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react'
 
-import { Box } from "ink";
-import FocusElement from "@components/ui/FocusElement";
-import type { ChallengeScrap, StatesChallenge } from "@typings/challengeData";
-import { useDownloadChallenge } from "@hooks/useDownloadManager";
-import Select, { type SelectHandle } from "@components/ui/Select";
-import type { PackageManagerType, TechnologySelector } from "@typings/technologySelector";
+import { Box } from 'ink'
+import FocusElement from '@components/ui/FocusElement'
+import type { ChallengeScrap, StatesChallenge } from '@typings/challengeData'
+import { useDownloadChallenge } from '@hooks/useDownloadManager'
+import Select, { type SelectHandle } from '@components/ui/Select'
+import type {
+  PackageManagerType,
+  TechnologySelector,
+} from '@typings/technologySelector'
 
-import { packageManagerQuestion, technologiesQuestions } from "@/config/questions";
+import {
+  packageManagerQuestion,
+  technologiesQuestions,
+} from '@/config/questions'
 
-import { useNavigationContext } from "@/contexts/useNavigation";
-import type { StepSection } from "../ChallengeSection";
+import { useNavigationContext } from '@/contexts/useNavigation'
+import type { StepSection } from '../ChallengeSection'
 
 /**
  * Props for the StartSteps component.
@@ -36,9 +42,17 @@ interface StartProps {
  * @param {StartProps} { data, status, isInit, setIsInit, nextStep } - The props for the component.
  * @returns {React.ReactNode} The StartSteps component.
  */
-export default function StartSteps({ data, status, isInit, setIsInit, nextStep }: StartProps): React.ReactNode {
+export default function StartSteps({
+  data,
+  status,
+  isInit,
+  setIsInit,
+  nextStep,
+}: StartProps): React.ReactNode {
   const [isStart, setIsStart] = useState(true)
-  const [technologie, setTechnologie] = useState<TechnologySelector | null>(null)
+  const [technologie, setTechnologie] = useState<TechnologySelector | null>(
+    null,
+  )
   const [pkgMgr, setPkgMgr] = useState<PackageManagerType | null>(null)
   const { setFocus } = useNavigationContext()
 
@@ -46,14 +60,14 @@ export default function StartSteps({ data, status, isInit, setIsInit, nextStep }
   const selectPkgRef = useRef<SelectHandle | null>(null)
 
   const { startDownload } = useDownloadChallenge({
-    downloadLink: data?.downloadLink ?? "",
-    technologie: technologie ?? "empty",
+    downloadLink: data?.downloadLink ?? '',
+    technologie: technologie ?? 'empty',
     challengeData: data,
-    packageManager: pkgMgr ?? "pnpm"
+    packageManager: pkgMgr ?? 'pnpm',
   })
 
   useEffect(() => {
-    if (status === "started") {
+    if (status === 'started') {
       setIsInit(!isInit)
       setFocus(technologiesQuestions.option[0]?.id ?? technologiesQuestions.id)
       selectTecRef.current?.openMenu()
@@ -77,7 +91,7 @@ export default function StartSteps({ data, status, isInit, setIsInit, nextStep }
 
   const handleStartChallenge = async (): Promise<void> => {
     startDownload()
-    nextStep("loading")
+    nextStep('loading')
   }
 
   return (
@@ -86,7 +100,9 @@ export default function StartSteps({ data, status, isInit, setIsInit, nextStep }
         ref={selectTecRef}
         onChange={(v) => handleSelectTec(v.id)}
         isDisabled={isInit}
-        nextFocus={packageManagerQuestion.option[0]?.id ?? packageManagerQuestion.id}
+        nextFocus={
+          packageManagerQuestion.option[0]?.id ?? packageManagerQuestion.id
+        }
         {...technologiesQuestions}
       />
       <Select

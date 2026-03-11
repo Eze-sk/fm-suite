@@ -9,7 +9,7 @@ export type Difficulty =
 
 export type Languages = 'HTML' | 'CSS' | 'JS' | 'API'
 
-export type StatesChallenge = 'pending' | "started" | 'completed' | "new_start"
+export type StatesChallenge = 'pending' | 'started' | 'completed' | 'new_start'
 
 export interface ChallengeScrap {
   id: number

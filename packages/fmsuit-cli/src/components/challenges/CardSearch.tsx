@@ -1,5 +1,10 @@
 import { Box, Text } from 'ink'
-import type { Difficulty, Languages, Plan, StatesChallenge } from '@typings/challengeData'
+import type {
+  Difficulty,
+  Languages,
+  Plan,
+  StatesChallenge,
+} from '@typings/challengeData'
 
 import PlanTag from './tags/Plan'
 import LanguagesTag from './tags/Languages'
@@ -34,10 +39,10 @@ export default function ChallengeCardSearch({
   status,
   isFocused = false,
 }: Props): React.ReactNode {
-
   const Status = (): React.ReactNode => {
-    if (status === "started") return <Text color={colors.cyan}>○</Text>
-    if (status === "completed" || status === "new_start") return <Text color={colors.blue.default}>✔</Text>
+    if (status === 'started') return <Text color={colors.cyan}>○</Text>
+    if (status === 'completed' || status === 'new_start')
+      return <Text color={colors.blue.default}>✔</Text>
     return <></>
   }
 

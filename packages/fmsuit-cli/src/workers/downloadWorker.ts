@@ -1,12 +1,15 @@
-import { downloadChallenge } from "@lib/downloadChallenge";
+import { downloadChallenge } from '@lib/downloadChallenge'
 
 self.onmessage = async (event): Promise<void> => {
-  const { downloadUrl, idChallenge } = event.data as { downloadUrl: string, idChallenge: number }
+  const { downloadUrl, idChallenge } = event.data as {
+    downloadUrl: string
+    idChallenge: number
+  }
 
   try {
     const result = await downloadChallenge({
       downloadUrl,
-      idChallenge
+      idChallenge,
     })
 
     self.postMessage({ success: true, result })

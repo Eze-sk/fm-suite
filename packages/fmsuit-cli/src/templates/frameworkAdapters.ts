@@ -5,14 +5,14 @@ interface DataType {
 }
 
 type ReturnType = {
-  file: string,
+  file: string
   code: string
 }[]
 
 export const frameworkAdapters = {
-  vite: (data: DataType): ReturnType => ([
+  vite: (data: DataType): ReturnType => [
     {
-      file: "index.html",
+      file: 'index.html',
       code: `
 <!doctype html>
 <html lang="en">
@@ -31,15 +31,15 @@ export const frameworkAdapters = {
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
-      `
-    }
-  ]),
+      `,
+    },
+  ],
   nextjs: (data: DataType): ReturnType => {
-    const jsxBody = data.body.replaceAll("class=", "className=")
+    const jsxBody = data.body.replaceAll('class=', 'className=')
 
     return [
       {
-        file: "page.tsx",
+        file: 'page.tsx',
         code: `
 export const metadata = {
   title: '${data.title}',
@@ -54,13 +54,13 @@ export default function Home() {
     </>
   );
 };
-    `
-      }
+    `,
+      },
     ]
   },
-  astro: (data: DataType): ReturnType => ([
+  astro: (data: DataType): ReturnType => [
     {
-      file: "index.astro",
+      file: 'index.astro',
       code: `
 ---
 import Layout from '../layouts/Layout.astro';
@@ -71,10 +71,10 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
 ${data.style}
-        `
+        `,
     },
     {
-      file: "Layout.astro",
+      file: 'Layout.astro',
       code: `
 <!doctype html>
 <html lang="en">
@@ -98,7 +98,7 @@ ${data.style}
 		height: 100%;
 	}
 </style>
-        `
-    }
-  ])
+        `,
+    },
+  ],
 }

@@ -1,5 +1,5 @@
-import fs from "node:fs"
-import path from "node:path"
+import fs from 'node:fs'
+import path from 'node:path'
 
 interface WaitForFileTypes {
   dir: string
@@ -15,7 +15,10 @@ interface WaitForFileTypes {
  * @returns {Promise<string | undefined>} The full path to the detected file, or undefined if timeout
  * @throws {Error} Throws an error if the timeout is exceeded without finding a file
  */
-export async function waitForFile({ dir, timeoutMs = 30000 }: WaitForFileTypes): Promise<string | undefined> {
+export async function waitForFile({
+  dir,
+  timeoutMs = 30000,
+}: WaitForFileTypes): Promise<string | undefined> {
   const start = Date.now()
   const before = new Set(fs.readdirSync(dir))
 
@@ -23,11 +26,12 @@ export async function waitForFile({ dir, timeoutMs = 30000 }: WaitForFileTypes):
     const files = fs.readdirSync(dir)
     const added = files.filter((f) => !before.has(f))
 
-    const ready = added.find((f) =>
-      !f.endsWith(".crdownload") &&
-      !f.endsWith(".tmp") &&
-      !f.endsWith(".part")
-    );
+    const ready = added.find(
+      (f) =>
+        !f.endsWith('.crdownload') &&
+        !f.endsWith('.tmp') &&
+        !f.endsWith('.part'),
+    )
 
     if (ready) {
       await new Promise((r) => setTimeout(r, 500))
@@ -37,5 +41,5 @@ export async function waitForFile({ dir, timeoutMs = 30000 }: WaitForFileTypes):
     await new Promise((r) => setTimeout(r, 500))
   }
 
-  throw new Error("Download timed out")
+  throw new Error('Download timed out')
 }

@@ -1,11 +1,11 @@
-import { colors } from "@/colorPalette";
-import SnakeLoader from "@components/ui/SnakeLoader";
-import { Box, Text } from "ink";
-import { useEffect, useRef } from "react";
-import type { StepSection } from "../ChallengeSection";
-import { useAppStore, type DownloadStep } from "@/stores/useApp";
-import { updateChallenge } from "@lib/challenge.controller";
-import type { ChallengeScrap } from "@typings/challengeData";
+import { colors } from '@/colorPalette'
+import SnakeLoader from '@components/ui/SnakeLoader'
+import { Box, Text } from 'ink'
+import { useEffect, useRef } from 'react'
+import type { StepSection } from '../ChallengeSection'
+import { useAppStore, type DownloadStep } from '@/stores/useApp'
+import { updateChallenge } from '@lib/challenge.controller'
+import type { ChallengeScrap } from '@typings/challengeData'
 
 /**
  * Props for the LoadingDownloadSteps component.
@@ -23,28 +23,35 @@ interface LoadStepsType {
  * @param {LoadStepsType} { nextStep, data } - The props for the component.
  * @returns {React.ReactNode} The LoadingDownloadSteps component.
  */
-export default function LoadingDownloadSteps({ nextStep, data }: LoadStepsType): React.ReactNode {
+export default function LoadingDownloadSteps({
+  nextStep,
+  data,
+}: LoadStepsType): React.ReactNode {
   const steps = useAppStore((state) => state.downloadStep)
   const updateData = useAppStore((state) => state.updateData)
 
   const hasCompletedRef = useRef(false)
 
   useEffect(() => {
-    const mergeStep = steps.find(step => step.id === "MERGE")
+    const mergeStep = steps.find((step) => step.id === 'MERGE')
 
     const handleCompleted = async (): Promise<void> => {
-      if (mergeStep && mergeStep.status === "completed" && !hasCompletedRef.current) {
+      if (
+        mergeStep &&
+        mergeStep.status === 'completed' &&
+        !hasCompletedRef.current
+      ) {
         await updateChallenge({
           id: data?.id ?? 0,
-          key: "status",
-          value: "completed"
+          key: 'status',
+          value: 'completed',
         })
 
         await updateData()
 
-        nextStep("start")
+        nextStep('start')
 
-        hasCompletedRef.current = true;
+        hasCompletedRef.current = true
       }
     }
 
@@ -53,16 +60,16 @@ export default function LoadingDownloadSteps({ nextStep, data }: LoadStepsType):
 
   const handleStep = (stepValue: DownloadStep): React.ReactNode => {
     const definedStep = {
-      icon: "◌",
-      color: "gray"
+      icon: '◌',
+      color: 'gray',
     }
 
-    if (stepValue.status === "loading") {
+    if (stepValue.status === 'loading') {
       definedStep.color = colors.cyan
-      definedStep.icon = "○"
-    } else if (stepValue.status === "completed") {
+      definedStep.icon = '○'
+    } else if (stepValue.status === 'completed') {
       definedStep.color = colors.blue.default
-      definedStep.icon = "◉"
+      definedStep.icon = '◉'
     }
 
     return (
@@ -75,20 +82,20 @@ export default function LoadingDownloadSteps({ nextStep, data }: LoadStepsType):
 
   return (
     <>
-      <Box height={14} gap={1} flexDirection="column" justifyContent="center" alignItems="flex-start">
+      <Box
+        height={14}
+        gap={1}
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="flex-start"
+      >
         <Text bold>Download Status</Text>
-        {
-          steps.map((step) => (
-            <Box key={step.id}>
-              {handleStep(step)}
-            </Box>
-          ))
-        }
+        {steps.map((step) => (
+          <Box key={step.id}>{handleStep(step)}</Box>
+        ))}
       </Box>
       <SnakeLoader
-        colors={
-          [colors.blue.default, colors.blue.light]
-        }
+        colors={[colors.blue.default, colors.blue.light]}
         width={80}
       />
     </>

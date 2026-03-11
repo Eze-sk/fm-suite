@@ -1,9 +1,9 @@
-type ViteStack = "vanilla" | "react" | "vue" | "svelte";
-type OtherFrameworks = "nextjs" | "astro" | "empty";
+type ViteStack = 'vanilla' | 'react' | 'vue' | 'svelte'
+type OtherFrameworks = 'nextjs' | 'astro' | 'empty'
 
-type ViteTS = `vite-${ViteStack}-ts`;
+type ViteTS = `vite-${ViteStack}-ts`
 type VanillaVite = `vite-${ViteStack}`
 
-export type TechnologySelector = VanillaVite | ViteTS | OtherFrameworks;
+export type TechnologySelector = VanillaVite | ViteTS | OtherFrameworks
 
-export type PackageManagerType = "npm" | "pnpm" | "bun"
+export type PackageManagerType = 'npm' | 'pnpm' | 'bun'

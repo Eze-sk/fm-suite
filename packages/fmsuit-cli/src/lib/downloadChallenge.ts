@@ -1,10 +1,15 @@
-import puppeteer from "puppeteer-core"
-import fs from "node:fs"
-import { BROWSER_PATH, CHALLENGES_FILES_DIR, DATA_DIR, SESSION_FILE } from "@consts/env"
-import { waitForFile } from "@utils/waitForFile"
-import { extractZip } from "@utils/extractZip"
-import { basename } from "node:path"
-import { updateChallenge } from "./challenge.controller"
+import puppeteer from 'puppeteer-core'
+import fs from 'node:fs'
+import {
+  BROWSER_PATH,
+  CHALLENGES_FILES_DIR,
+  DATA_DIR,
+  SESSION_FILE,
+} from '@consts/env'
+import { waitForFile } from '@utils/waitForFile'
+import { extractZip } from '@utils/extractZip'
+import { basename } from 'node:path'
+import { updateChallenge } from './challenge.controller'
 
 export interface DlChallengeReturn {
   cachePath: string
@@ -25,7 +30,10 @@ interface dlChallenge {
  * @returns {Promise<DlChallengeReturn>} Object containing cache path and cache name
  * @throws {Error} If download fails or required elements are not found
  */
-export async function downloadChallenge({ downloadUrl, idChallenge }: dlChallenge): Promise<DlChallengeReturn> {
+export async function downloadChallenge({
+  downloadUrl,
+  idChallenge,
+}: dlChallenge): Promise<DlChallengeReturn> {
   if (!fs.existsSync(CHALLENGES_FILES_DIR)) {
     fs.mkdirSync(CHALLENGES_FILES_DIR, { recursive: true })
   }
@@ -34,24 +42,21 @@ export async function downloadChallenge({ downloadUrl, idChallenge }: dlChalleng
     executablePath: BROWSER_PATH,
     headless: true,
     userDataDir: DATA_DIR,
-    args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-    ]
-  });
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  })
 
   try {
-    const sessionExists = await Bun.file(SESSION_FILE).exists();
+    const sessionExists = await Bun.file(SESSION_FILE).exists()
     const page = await browser.newPage()
 
     const client = await page.createCDPSession()
-    await client.send("Page.setDownloadBehavior", {
+    await client.send('Page.setDownloadBehavior', {
       behavior: 'allow',
       downloadPath: CHALLENGES_FILES_DIR,
     })
 
     if (sessionExists) {
-      const sessionData = await Bun.file(SESSION_FILE).json();
+      const sessionData = await Bun.file(SESSION_FILE).json()
 
       await browser.setCookie({
         name: sessionData.name,
@@ -60,65 +65,74 @@ export async function downloadChallenge({ downloadUrl, idChallenge }: dlChalleng
         path: '/',
         httpOnly: true,
         secure: true,
-      });
+      })
     }
 
     await page.goto(downloadUrl, { waitUntil: 'networkidle2' })
 
-    const startBtnSelector = 'xpath/.//button[contains(text(), "Start challenge")]';
-    const downloadBtnSelector = 'xpath/.//button[contains(text(), "Download starter")]';
+    const startBtnSelector =
+      'xpath/.//button[contains(text(), "Start challenge")]'
+    const downloadBtnSelector =
+      'xpath/.//button[contains(text(), "Download starter")]'
 
-    const startButton = await page.waitForSelector(startBtnSelector, { timeout: 5000 }).catch(() => null);
+    const startButton = await page
+      .waitForSelector(startBtnSelector, { timeout: 5000 })
+      .catch(() => null)
 
     if (startButton) {
       await Promise.all([
         page.waitForNavigation({ waitUntil: 'networkidle0' }).catch(() => null),
         startButton.click(),
-      ]);
+      ])
     }
 
     const downloadButton = await page.waitForSelector(downloadBtnSelector, {
       visible: true,
-      timeout: 15000
+      timeout: 15000,
     })
 
     if (!downloadButton) {
-      throw new Error("Download button not found");
+      throw new Error('Download button not found')
     }
 
-    await downloadButton?.click();
+    await downloadButton?.click()
 
-    const pathZip = await waitForFile({ dir: CHALLENGES_FILES_DIR, timeoutMs: 60000 });
+    const pathZip = await waitForFile({
+      dir: CHALLENGES_FILES_DIR,
+      timeoutMs: 60000,
+    })
 
     await extractZip({
-      zipPath: pathZip ?? "",
-      targetDir: CHALLENGES_FILES_DIR
+      zipPath: pathZip ?? '',
+      targetDir: CHALLENGES_FILES_DIR,
     })
 
-    const cacheName = basename(pathZip ?? "").replace("-main.zip", "")
-    const cachePath = pathZip?.replace(".zip", "") ?? ""
+    const cacheName = basename(pathZip ?? '').replace('-main.zip', '')
+    const cachePath = pathZip?.replace('.zip', '') ?? ''
 
     await updateChallenge({
       id: idChallenge,
-      key: "challengeCacheName",
-      value: cacheName
+      key: 'challengeCacheName',
+      value: cacheName,
     })
 
     await updateChallenge({
       id: idChallenge,
-      key: "challengeCachePath",
-      value: cachePath
+      key: 'challengeCachePath',
+      value: cachePath,
     })
 
     return {
       cacheName,
-      cachePath
+      cachePath,
     }
   } catch (err) {
-    throw new Error(`Error to the download the challenge, <downloadManager> : ${err}`)
+    throw new Error(
+      `Error to the download the challenge, <downloadManager> : ${err}`,
+    )
   } finally {
-    const pages = await browser.pages();
-    await Promise.all(pages.map(page => page.close()));
+    const pages = await browser.pages()
+    await Promise.all(pages.map((page) => page.close()))
     await browser.close()
   }
 }

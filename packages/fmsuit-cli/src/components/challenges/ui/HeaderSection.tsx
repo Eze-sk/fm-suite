@@ -1,8 +1,8 @@
-import { Box, Text } from "ink";
-import PlanTag from "../tags/Plan";
-import LanguagesTag from "../tags/Languages";
-import DifficultyTag from "../tags/Difficulty";
-import type { ChallengeScrap } from "@typings/challengeData";
+import { Box, Text } from 'ink'
+import PlanTag from '../tags/Plan'
+import LanguagesTag from '../tags/Languages'
+import DifficultyTag from '../tags/Difficulty'
+import type { ChallengeScrap } from '@typings/challengeData'
 
 interface Props {
   data: ChallengeScrap | undefined
@@ -18,11 +18,7 @@ interface Props {
 export default function HeaderSection({ data }: Props): React.ReactNode {
   return (
     <Box flexDirection="column" marginBottom={1}>
-      <Box
-        justifyContent="space-between"
-        alignItems="center"
-        marginBottom={2}
-      >
+      <Box justifyContent="space-between" alignItems="center" marginBottom={2}>
         <Box gap={2}>
           <PlanTag plan={data?.plan} />
           {data?.languages.map((l) => (

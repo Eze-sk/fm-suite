@@ -1,5 +1,5 @@
-import { Box, Text, type BoxProps } from "ink"
-import { useEffect, useState } from "react"
+import { Box, Text, type BoxProps } from 'ink'
+import { useEffect, useState } from 'react'
 
 /**
  * Props for the SnakeLoader component.
@@ -20,7 +20,11 @@ const CHARS = ['▁', '▁']
  * @param {SkLoaderProps} { colors, width, ...att } - The props for the component.
  * @returns {React.ReactNode} The SnakeLoader component.
  */
-export default function SnakeLoader({ colors, width, ...att }: SkLoaderProps): React.ReactNode {
+export default function SnakeLoader({
+  colors,
+  width,
+  ...att
+}: SkLoaderProps): React.ReactNode {
   const [frame, setFrame] = useState(0)
 
   const charSize = Math.ceil(width / CHARS.length)
@@ -33,22 +37,19 @@ export default function SnakeLoader({ colors, width, ...att }: SkLoaderProps): R
     return (): void => clearInterval(timer)
   }, [])
 
-
   return (
     <Box width={width} {...att}>
-      {
-        Array.from({ length: width }).map((_, i) => {
-          const relativePos = (i + frame) % width
+      {Array.from({ length: width }).map((_, i) => {
+        const relativePos = (i + frame) % width
 
-          const charSizeIndex = Math.floor(relativePos / charSize) % CHARS.length
+        const charSizeIndex = Math.floor(relativePos / charSize) % CHARS.length
 
-          return (
-            <Text color={colors[charSizeIndex]} key={i}>
-              {CHARS[charSizeIndex]}
-            </Text>
-          )
-        })
-      }
+        return (
+          <Text color={colors[charSizeIndex]} key={i}>
+            {CHARS[charSizeIndex]}
+          </Text>
+        )
+      })}
     </Box>
   )
 }

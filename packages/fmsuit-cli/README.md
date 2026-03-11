@@ -4,9 +4,9 @@ A command-line interface (CLI) to streamline the development workflow for Fronte
 
 ## Features
 
--   **Effortless Challenge Setup**: Quickly initialize new Frontend Mentor challenges with predefined structures.
--   **Seamless Integration**: Designed to work smoothly with your existing development environment.
--   **Configuration via `fm-cli.config.json`**: Customize your challenge workspace by specifying the base path where challenges will be added.
+- **Effortless Challenge Setup**: Quickly initialize new Frontend Mentor challenges with predefined structures.
+- **Seamless Integration**: Designed to work smoothly with your existing development environment.
+- **Configuration via `fm-cli.config.json`**: Customize your challenge workspace by specifying the base path where challenges will be added.
 
 ## Configuration
 
@@ -24,11 +24,11 @@ Ensure this file is present in your project's root directory or a location acces
 
 ## Usage
 
-*(Installation instructions are currently omitted as the package is not yet published.)*
+_(Installation instructions are currently omitted as the package is not yet published.)_
 
 Once configured, you can use the CLI to:
 
--   Start a new challenge: `fm challenge start [challenge-name]`
--   Manage existing challenges: `fm challenge list`, `fm challenge open [challenge-name]`
+- Start a new challenge: `fm challenge start [challenge-name]`
+- Manage existing challenges: `fm challenge list`, `fm challenge open [challenge-name]`
 
 More detailed usage instructions will be provided upon package publication.
