@@ -24,11 +24,16 @@ Ensure this file is present in your project's root directory or a location acces
 
 ## Usage
 
-_(Installation instructions are currently omitted as the package is not yet published.)_
+## Installation
 
-Once configured, you can use the CLI to:
+You can install `@fmsuit/cli` using npm:
 
-- Start a new challenge: `fm challenge start [challenge-name]`
-- Manage existing challenges: `fm challenge list`, `fm challenge open [challenge-name]`
+```bash
+npm install @fmsuit/cli
+```
 
-More detailed usage instructions will be provided upon package publication.
+## Usage
+
+Once installed, you can use the `fm` command directly. you can use `npx`.
+
+- **Start CLI**: `npm run fm`
