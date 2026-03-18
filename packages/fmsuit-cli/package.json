@@ -13,7 +13,7 @@
   "scripts": {
     "lint": "eslint .",
     "dev": "bun --watch ./index.tsx",
-    "build": "bun build ./index.tsx --outdir --compile ./dist --target node"
+    "build": "bun build ./index.tsx --outdir ./dist --target node"
   },
   "bin": {
     "fms": "./dist/index.js"
@@ -23,9 +23,7 @@
     "@types/bun": "latest",
     "@types/react": "19.2.8",
     "prettier": "3.8.1",
-    "prettier-plugin-astro": "0.14.1"
-  },
-  "peerDependencies": {
+    "prettier-plugin-astro": "0.14.1",
     "typescript": "5"
   },
   "dependencies": {
