@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-03-19
+
+### Bug Fixed
+
+- Add releasec with its sub-packages to fix version errors with npm
+
 ## [0.5.0] - 2026-03-10
 
 ### Added
