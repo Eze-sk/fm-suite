@@ -43,5 +43,6 @@ jobs:
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Run semantic release
-        run: pnx semantic-release
+      - run: |
+          cd packages/fmsuit-cli
+          bunx semantic-release
