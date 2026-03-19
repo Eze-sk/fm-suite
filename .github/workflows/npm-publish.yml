@@ -5,7 +5,9 @@ on:
     branches:
       - main
       - next
-
+    paths:
+      - 'packages/fmsuit-cli/**'
+      
 permissions:
   contents: read
   issues: write
